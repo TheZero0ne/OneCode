@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="OneCode.View.OneCodeWindowControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:OneCode"
+             Background="{DynamicResource VsBrush.Window}"
+             Foreground="{DynamicResource VsBrush.WindowText}"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             Name="MyToolWindow">
+    <UserControl.Resources>
+        <local:VariableCollectionViewModel x:Key="vcvm">
+        </local:VariableCollectionViewModel>
+    </UserControl.Resources>
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <TextBlock Margin="126,10" HorizontalAlignment="Center"><Run Text="Variables"/></TextBlock>
+            <Button x:Name="btnFindVariables" Height="20" Margin="0,0,200,0" Content="Variablen finden" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" />
+            <ListBox x:Name="lbVariables" Height="244" ItemsSource="{Binding Source={StaticResource vcvm}}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=Name}"/>
+                            <TextBlock Text="{Binding Path=LineNumber}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </Grid>
+</UserControl>
