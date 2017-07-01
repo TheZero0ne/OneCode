@@ -49,6 +49,9 @@ namespace DAL {
                 foreach (var var in f.Declaration.Variables) {
                     var fieldSymbol = model.GetDeclaredSymbol(var);
 
+                    //TODO: Hier muss noch der Typ des aktuellen Felds gefunden werden
+                    //TODO: (vielleicht optional) Stelle im Dokument mit einlesen
+
                     string name = fieldSymbol.Name;
                     Type type = Type.GetType(fieldSymbol.ContainingType.Name.ToString());
                     string visibleType = f.Declaration.Type.ChildTokens().Where(v => v.IsKeyword()).First().Value.ToString();
