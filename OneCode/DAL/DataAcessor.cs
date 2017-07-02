@@ -1,9 +1,12 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.FindSymbols;
 using Microsoft.CSharp;
 using OneCode;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DAL {
@@ -23,52 +26,63 @@ namespace DAL {
         }
 
         public void FindVariablesInDoc(EnvDTE.TextDocument haystackDoc) {
-            EnvDTE.EditPoint objEditPt = haystackDoc.StartPoint.CreateEditPoint();
+            VariableCollection helperCollection = new VariableCollection();
+            var objEditPt = haystackDoc.StartPoint.CreateEditPoint();
             var tree = CSharpSyntaxTree.ParseText(objEditPt.GetText(haystackDoc.EndPoint));
             var Mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
             var compilation = CSharpCompilation.Create("MyCompilation", syntaxTrees: new[] { tree }, references: new[] { Mscorlib });
             var model = compilation.GetSemanticModel(tree);
+            var variables = tree.GetRoot().DescendantNodes().Where(v => v is FieldDeclarationSyntax || v is LocalDeclarationStatementSyntax || v is PropertyDeclarationSyntax || v is ParameterSyntax);
 
-            var vars = tree.GetRoot().DescendantNodes().Where(v => v is VariableDeclarationSyntax || v is ParameterSyntax || v is PropertyDeclarationSyntax || v is LocalDeclarationStatementSyntax);
+            //TODO: übergeordneten Typen finden -> Objekt in Variable(Klasse) speichern
+            var ws = new AdhocWorkspace();
+            Solution s = ws.CurrentSolution;
 
-            var property = tree.GetRoot().DescendantNodes().OfType<PropertyDeclarationSyntax>();
-            var parameter = tree.GetRoot().DescendantNodes().OfType<ParameterSyntax>();
-            var field = tree.GetRoot().DescendantNodes().OfType<FieldDeclarationSyntax>();
-            var variableDeclarations = tree.GetRoot().DescendantNodes().OfType<LocalDeclarationStatementSyntax>();
 
-            //Get symbols
-            foreach (var p in property) {
-                var propertySymbol = model.GetDeclaredSymbol(p);
-            }
+            foreach (var v in variables) {
+                var para = v as ParameterSyntax;
+                var prop = v as PropertyDeclarationSyntax;
+                var local = v as LocalDeclarationStatementSyntax;
+                var field = v as FieldDeclarationSyntax;
 
-            foreach (var p in parameter) {
-                var methodSymbol = model.GetDeclaredSymbol(p);
-            }
+                if (para != null) {
+                    var symbol = model.GetDeclaredSymbol(para);
+                    string visibleType = para.Type.ToString();
+                    string name = symbol.Name;
+                    string kind = symbol.Kind.ToString();
 
-            foreach (var f in field) {
-                foreach (var var in f.Declaration.Variables) {
-                    var fieldSymbol = model.GetDeclaredSymbol(var);
+                    //SymbolFinder.FindImplementationsAsync(symbol);
 
-                    //TODO: Hier muss noch der Typ des aktuellen Felds gefunden werden
-                    //TODO: (vielleicht optional) Stelle im Dokument mit einlesen
+                    varCollection.Add(new Variable(visibleType, name, kind, para.SpanStart));
+                } else if (prop != null) {
+                    var symbol = model.GetDeclaredSymbol(prop);
+                    string visibleType = prop.Type.ToString();
+                    string name = symbol.Name;
+                    string kind = symbol.Kind.ToString();
 
-                    string name = fieldSymbol.Name;
-                    Type type = Type.GetType(fieldSymbol.ContainingType.Name.ToString());
-                    string visibleType = f.Declaration.Type.ChildTokens().Where(v => v.IsKeyword()).First().Value.ToString();
-                    string text = fieldSymbol.OriginalDefinition.ToString();
+                    varCollection.Add(new Variable(visibleType, name, kind, prop.SpanStart));
+                } else if (local != null) {
+                    string visibleType = local.Declaration.Type.ToString();
 
-                    //varCollection.Add(new Variable(name, text, haystackDoc, type));
+                    foreach (var var in local.Declaration.Variables) {
+                        var symbol = model.GetDeclaredSymbol(var);
+                        string name = symbol.Name;
+                        string kind = symbol.Kind.ToString();
+
+                        varCollection.Add(new Variable(visibleType, name, kind, local.SpanStart));
+                    }
+                } else if (field != null) {
+                    string visibleType = field.Declaration.Type.ToString();
+
+                    foreach (var var in field.Declaration.Variables) {
+                        var symbol = model.GetDeclaredSymbol(var);
+                        string name = symbol.Name;
+                        string kind = symbol.Kind.ToString();
+
+                        varCollection.Add(new Variable(visibleType, name, kind, field.SpanStart));
+                    }
                 }
             }
-
-            foreach (var variableDeclaration in variableDeclarations)
-            {
-                var symbolInfo = model.GetSymbolInfo(variableDeclaration.Declaration.Type);
-                var typeSymbol = symbolInfo.Symbol; // the type symbol for the variable..
-                
-            }
-
-            Translator.TranslateStringArray(new string[] { "Hello", "my", "name", "is", "Tim" });
         }
     }
 }

@@ -13,20 +13,17 @@
         <local:VariableCollectionViewModel x:Key="vcvm">
         </local:VariableCollectionViewModel>
     </UserControl.Resources>
-    <Grid>
-        <StackPanel Orientation="Vertical">
-            <TextBlock Margin="126,10" HorizontalAlignment="Center"><Run Text="Variables"/></TextBlock>
-            <Button x:Name="btnFindVariables" Height="20" Margin="0,0,200,0" Content="Variablen finden" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" />
-            <ListBox x:Name="lbVariables" Height="244" ItemsSource="{Binding Source={StaticResource vcvm}}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Path=Name}"/>
-                            <TextBlock Text="{Binding Path=LineNumber}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </StackPanel>
-    </Grid>
+    <DockPanel>
+        <Button DockPanel.Dock="Top"  x:Name="btnFindVariables" Height="20" Content="Variablen finden" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" Width="150" HorizontalAlignment="Left" />
+        <ListBox DockPanel.Dock="Top" x:Name="lbVariables" ItemsSource="{Binding Source={StaticResource vcvm}}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=Text}"/>
+                        <TextBlock Text="{Binding Path=Kind}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
 </UserControl>
