@@ -3,7 +3,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.FindSymbols;
 using Microsoft.CSharp;
+using Microsoft.VisualStudio.LanguageServices;
 using OneCode;
+using OneCode.View;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ namespace DAL {
     class DataAcessor {
         private static DataAcessor instance;
         public VariableCollection varCollection { get; set; }
+        public VisualStudioWorkspace Workspace { get; set; }
 
         private DataAcessor() {
             varCollection = new VariableCollection();
@@ -34,11 +37,6 @@ namespace DAL {
             var model = compilation.GetSemanticModel(tree);
             var variables = tree.GetRoot().DescendantNodes().Where(v => v is FieldDeclarationSyntax || v is LocalDeclarationStatementSyntax || v is PropertyDeclarationSyntax || v is ParameterSyntax);
 
-            //TODO: übergeordneten Typen finden -> Objekt in Variable(Klasse) speichern
-            var ws = new AdhocWorkspace();
-            Solution s = ws.CurrentSolution;
-
-
             foreach (var v in variables) {
                 var para = v as ParameterSyntax;
                 var prop = v as PropertyDeclarationSyntax;
@@ -50,8 +48,6 @@ namespace DAL {
                     string visibleType = para.Type.ToString();
                     string name = symbol.Name;
                     string kind = symbol.Kind.ToString();
-
-                    //SymbolFinder.FindImplementationsAsync(symbol);
 
                     varCollection.Add(new Variable(visibleType, name, kind, para.SpanStart));
                 } else if (prop != null) {

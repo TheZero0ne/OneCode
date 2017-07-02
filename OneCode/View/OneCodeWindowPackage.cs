@@ -15,6 +15,11 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
+using Microsoft.VisualStudio.LanguageServices;
+using System.ComponentModel.Composition;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.CodeAnalysis;
+using DAL;
 
 namespace OneCode.View {
     /// <summary>
@@ -56,17 +61,23 @@ namespace OneCode.View {
             // initialization is the Initialize method.
         }
 
-        #region Package Members
-
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
         /// where you can put all the initialization code that rely on services provided by VisualStudio.
         /// </summary>
         protected override void Initialize() {
+            var componentModel = (IComponentModel)this.GetService(typeof(SComponentModel));
+            var workspace = componentModel.GetService<VisualStudioWorkspace>();
+
+            DataAcessor.getInstance().Workspace = workspace;
+
+            workspace.DocumentOpened += Workspace_DocumentOpened;
+
             OneCodeWindowCommand.Initialize(this);
             base.Initialize();
         }
 
-        #endregion
+        private void Workspace_DocumentOpened(object sender, DocumentEventArgs e) {
+        }
     }
 }
