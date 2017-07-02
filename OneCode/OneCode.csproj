@@ -53,7 +53,6 @@
   <ItemGroup>
     <Compile Include="DAL\DataAcessor.cs" />
     <Compile Include="Model\AccessToken.cs" />
-    <Compile Include="Model\CodeRange.cs" />
     <Compile Include="Model\Translator.cs" />
     <Compile Include="Model\Variable.cs" />
     <Compile Include="Model\VariableCollection.cs" />
