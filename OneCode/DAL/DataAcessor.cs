@@ -12,9 +12,6 @@ namespace DAL {
 
         public VariableCollection varCollection { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public VisualStudioWorkspace Workspace {
             get { return Workspace; }
             set {
