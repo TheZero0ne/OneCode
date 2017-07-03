@@ -16,12 +16,11 @@ namespace DAL {
         private bool workspaceWasSet = false;
         private static DataAcessor instance;
         private VisualStudioWorkspace workspace;
+        private Microsoft.CodeAnalysis.Document doc;
 
+        public Microsoft.CodeAnalysis.Document ActualDocument { get { return doc; } set { doc = value; } }
         public VariableCollection varCollection { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public VisualStudioWorkspace Workspace {
             get { return workspace; }
             set {
@@ -90,6 +89,10 @@ namespace DAL {
 
         }
 
+        /// <summary>
+        /// Checks the Syntax of an Document and adds all Locals, Fields, Parameters and Properties of the Document to the VariableCollection
+        /// </summary>
+        /// <param name="haystackDoc">A Document of Type EnvDTE</param>
         public void FindVariablesInDoc(EnvDTE.TextDocument haystackDoc) {
             varCollection = new VariableCollection();
             var objEditPt = haystackDoc.StartPoint.CreateEditPoint();
@@ -99,86 +102,15 @@ namespace DAL {
             var compilation = CSharpCompilation.Create("MyCompilation", syntaxTrees: new[] { tree }, references: new[] { Mscorlib });
             var model = compilation.GetSemanticModel(tree);
 
-
-
-
             Rewriter = new MyRewriter(model, varCollection, MyRewriterModus.SEARCH);
             var result = Rewriter.Visit(tree.GetRoot());
 
-            var solution = workspace.CurrentSolution;
+            string pathHaystackDoc = haystackDoc.DTE.ActiveDocument.FullName;
+            Microsoft.CodeAnalysis.Document activeCodeDoc = workspace.CurrentSolution.Projects.First().Documents.Where(d => d.FilePath == pathHaystackDoc).First();
+            var solution = workspace.CurrentSolution.RemoveDocument(activeCodeDoc.Id);
+            solution = solution.AddDocument(activeCodeDoc.Id, activeCodeDoc.Name, result);
 
-            var project = solution.GetProject(solution.ProjectIds.First());
-           
-
-            var filePath = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.FullName;
-
-            // Save to file
-            //File.WriteAllText(filePath, result.ToFullString());
-
-            /*
-            var objEditPt = haystackDoc.StartPoint.CreateEditPoint();
-            var tree = CSharpSyntaxTree.ParseText(objEditPt.GetText(haystackDoc.EndPoint));
-            var Mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-            var compilation = CSharpCompilation.Create("MyCompilation", syntaxTrees: new[] { tree }, references: new[] { Mscorlib });
-            var model = compilation.GetSemanticModel(tree);
-            var variables = tree.GetRoot().DescendantNodes().Where(v => v is FieldDeclarationSyntax || v is LocalDeclarationStatementSyntax || v is PropertyDeclarationSyntax || v is ParameterSyntax);
-            Microsoft.CodeAnalysis.TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as Microsoft.CodeAnalysis.TextDocument;
-
-            foreach (var v in variables)
-            {
-                var para = v as ParameterSyntax;
-                var prop = v as PropertyDeclarationSyntax;
-                var local = v as LocalDeclarationStatementSyntax;
-                var field = v as FieldDeclarationSyntax;
-
-                var symbol = model.GetDeclaredSymbol(v);
-                string name = symbol.Name;
-                string kind = symbol.Kind.ToString();
-
-                var originalSolution = workspace.CurrentSolution;
-                var project = originalSolution.GetProject(originalSolution.ProjectIds.First());
-
-
-                if (para != null)
-                {
-                    string visibleType = para.Type.ToString();
-
-                    varCollection.Add(new Variable(visibleType, name, kind, para.SpanStart));
-                }
-                else if (prop != null)
-                {
-                    string visibleType = prop.Type.ToString();
-
-                    varCollection.Add(new Variable(visibleType, name, kind, prop.SpanStart));
-                }
-                else if (local != null)
-                {
-                    string visibleType = local.Declaration.Type.ToString();
-
-                    foreach (var var in local.Declaration.Variables)
-                    {
-                        symbol = model.GetDeclaredSymbol(var);
-                        name = symbol.Name;
-                        kind = symbol.Kind.ToString();
-
-                        varCollection.Add(new Variable(visibleType, name, kind, local.SpanStart));
-                    }
-                }
-                else if (field != null)
-                {
-                    string visibleType = field.Declaration.Type.ToString();
-
-                    foreach (var var in field.Declaration.Variables)
-                    {
-                        symbol = model.GetDeclaredSymbol(var);
-                        name = symbol.Name;
-                        kind = symbol.Kind.ToString();
-
-                        varCollection.Add(new Variable(visibleType, name, kind, field.SpanStart));
-                    }
-                }
-                */
-            }
-            
+            workspace.TryApplyChanges(solution);
+        }
     }
 }

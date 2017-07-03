@@ -73,13 +73,13 @@ namespace OneCode.View {
             base.Initialize();
         }
 
-        private void Workspace_WorkspaceChanged(object sender, WorkspaceChangeEventArgs e)
-        {
-            Debug.WriteLine("Workspace Changed");
+        private void Workspace_WorkspaceChanged(object sender, WorkspaceChangeEventArgs e) {
+            Debug.WriteLine("Changed");
         }
 
         private void Workspace_DocumentOpened(object sender, DocumentEventArgs e) {
-            Debug.WriteLine("Document Opened");
+            DataAcessor.getInstance().ActualDocument = DataAcessor.getInstance().Workspace.CurrentSolution.GetDocument(e.Document.Id);
+            Debug.WriteLine("Opened");
         }
     }
 }
