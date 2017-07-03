@@ -21,6 +21,9 @@ namespace OneCode {
             set { Var.Text = value; }
         }
 
-    
+        public string Kind {
+            get { return Var.Kind; }
+            set { Var.Kind = value; }
+        }
     }
 }
