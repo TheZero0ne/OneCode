@@ -9,14 +9,15 @@ namespace DAL {
     class DataAcessor {
         private bool workspaceWasSet = false;
         private static DataAcessor instance;
+        private VisualStudioWorkspace workspace;
 
         public VariableCollection varCollection { get; set; }
 
         public VisualStudioWorkspace Workspace {
-            get { return Workspace; }
+            get { return workspace; }
             set {
                 if (!workspaceWasSet) {
-                    Workspace = value;
+                    workspace = value;
                     workspaceWasSet = true;
                 }
             }
@@ -48,27 +49,28 @@ namespace DAL {
                 var local = v as LocalDeclarationStatementSyntax;
                 var field = v as FieldDeclarationSyntax;
 
+                var symbol = model.GetDeclaredSymbol(v);
+                string name = symbol.Name;
+                string kind = symbol.Kind.ToString();
+
                 if (para != null) {
-                    var symbol = model.GetDeclaredSymbol(para);
                     string visibleType = para.Type.ToString();
-                    string name = symbol.Name;
-                    string kind = symbol.Kind.ToString();
 
                     varCollection.Add(new Variable(visibleType, name, kind, para.SpanStart));
                 } else if (prop != null) {
-                    var symbol = model.GetDeclaredSymbol(prop);
+                    //var symbol = model.GetDeclaredSymbol(prop);
                     string visibleType = prop.Type.ToString();
-                    string name = symbol.Name;
-                    string kind = symbol.Kind.ToString();
+                    //string name = symbol.Name;
+                    //string kind = symbol.Kind.ToString();
 
                     varCollection.Add(new Variable(visibleType, name, kind, prop.SpanStart));
                 } else if (local != null) {
                     string visibleType = local.Declaration.Type.ToString();
 
                     foreach (var var in local.Declaration.Variables) {
-                        var symbol = model.GetDeclaredSymbol(var);
-                        string name = symbol.Name;
-                        string kind = symbol.Kind.ToString();
+                        symbol = model.GetDeclaredSymbol(var);
+                        name = symbol.Name;
+                        kind = symbol.Kind.ToString();
 
                         varCollection.Add(new Variable(visibleType, name, kind, local.SpanStart));
                     }
@@ -76,9 +78,9 @@ namespace DAL {
                     string visibleType = field.Declaration.Type.ToString();
 
                     foreach (var var in field.Declaration.Variables) {
-                        var symbol = model.GetDeclaredSymbol(var);
-                        string name = symbol.Name;
-                        string kind = symbol.Kind.ToString();
+                        symbol = model.GetDeclaredSymbol(var);
+                        name = symbol.Name;
+                        kind = symbol.Kind.ToString();
 
                         varCollection.Add(new Variable(visibleType, name, kind, field.SpanStart));
                     }
