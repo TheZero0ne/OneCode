@@ -1,21 +1,29 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.FindSymbols;
-using Microsoft.CSharp;
 using Microsoft.VisualStudio.LanguageServices;
 using OneCode;
-using OneCode.View;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace DAL {
     class DataAcessor {
+        private bool workspaceWasSet = false;
         private static DataAcessor instance;
+
         public VariableCollection varCollection { get; set; }
-        public VisualStudioWorkspace Workspace { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public VisualStudioWorkspace Workspace {
+            get { return Workspace; }
+            set {
+                if (!workspaceWasSet) {
+                    Workspace = value;
+                    workspaceWasSet = true;
+                }
+            }
+        }
 
         private DataAcessor() {
             varCollection = new VariableCollection();
