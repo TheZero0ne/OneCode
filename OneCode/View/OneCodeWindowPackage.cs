@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.CodeAnalysis;
 using DAL;
+using System.Diagnostics;
 
 namespace OneCode.View {
     /// <summary>
@@ -65,13 +66,20 @@ namespace OneCode.View {
             DataAcessor.getInstance().Workspace = workspace;
 
             workspace.DocumentOpened += Workspace_DocumentOpened;
+            workspace.WorkspaceChanged += Workspace_WorkspaceChanged;
 
             OneCodeWindowCommand.Initialize(this);
             OneCodeConfigWindowCommand.Initialize(this);
             base.Initialize();
         }
 
+        private void Workspace_WorkspaceChanged(object sender, WorkspaceChangeEventArgs e) {
+            Debug.WriteLine("Changed");
+        }
+
         private void Workspace_DocumentOpened(object sender, DocumentEventArgs e) {
+            DataAcessor.getInstance().ActualDocument = DataAcessor.getInstance().Workspace.CurrentSolution.GetDocument(e.Document.Id);
+            Debug.WriteLine("Opened");
         }
     }
 }
