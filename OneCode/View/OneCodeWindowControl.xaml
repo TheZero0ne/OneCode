@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:OneCode"
+             xmlns:properties="clr-namespace:OneCode.Properties"
              Background="{DynamicResource VsBrush.Window}"
              Foreground="{DynamicResource VsBrush.WindowText}"
              mc:Ignorable="d"
@@ -13,9 +14,17 @@
         <local:VariableCollectionViewModel x:Key="vcvm">
         </local:VariableCollectionViewModel>
     </UserControl.Resources>
-    <DockPanel>
-        <Button DockPanel.Dock="Top"  x:Name="btnFindVariables" Height="20" Content="Variablen finden" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" Width="150" HorizontalAlignment="Left" />
-        <ListBox DockPanel.Dock="Top" x:Name="lbVariables" ItemsSource="{Binding Source={StaticResource vcvm}}">
+    <DockPanel LastChildFill="False">
+        <Button DockPanel.Dock="Top" Background="Transparent" HorizontalAlignment="Right" x:Name="btnOpenConfig" Height="30" Width="30" Click="btnOpenConfig_Click">
+            <Image Source="settings.png"/>
+        </Button>
+        <Label DockPanel.Dock="Top" FontSize="20">Auswahl</Label>
+        <ComboBox DockPanel.Dock="Top" Height="30" Width="200" x:Name="selectionTypes" HorizontalAlignment="Left"/>
+
+        <Label DockPanel.Dock="Top" FontSize="20">Suche</Label>
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">Auswahl nach Variablen durchsuchen, die nicht der Konfiguration entsprechen</TextBlock>
+        <Button DockPanel.Dock="Top"  x:Name="btnFindVariables" Height="30" Content="Auswahl durchsuchen" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" Width="200" HorizontalAlignment="Left" />
+        <ListBox DockPanel.Dock="Top" x:Name="lbVariables" Height="100" ItemsSource="{Binding Source={StaticResource vcvm}}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -25,5 +34,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Button DockPanel.Dock="Top" x:Name="btnSaveChanges" Height="30" Content="Änderungen speichern" Width="200" HorizontalAlignment="Left" />
     </DockPanel>
 </UserControl>
