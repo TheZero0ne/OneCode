@@ -38,6 +38,7 @@ namespace OneCode.View {
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof(OneCodeWindow))]
+    [ProvideToolWindow(typeof(OneCodeConfigWindow))]
     [Guid(OneCodeWindowPackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     public sealed class OneCodeWindowPackage : Package {
@@ -64,6 +65,7 @@ namespace OneCode.View {
         /// </summary>
         protected override void Initialize() {
             OneCodeWindowCommand.Initialize(this);
+            OneCodeConfigWindowCommand.Initialize(this);
             base.Initialize();
         }
 

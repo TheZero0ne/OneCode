@@ -21,9 +21,6 @@ namespace OneCode {
             set { Var.Text = value; }
         }
 
-        public int LineNumber {
-            get { return Var.LineNumber; }
-            set { Var.LineNumber = value; }
-        }
+    
     }
 }

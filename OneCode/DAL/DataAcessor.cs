@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Rename;
 using Microsoft.CSharp;
 using OneCode;
 using System;
@@ -30,6 +31,10 @@ namespace DAL {
             var model = compilation.GetSemanticModel(tree);
 
             var vars = tree.GetRoot().DescendantNodes().Where(v => v is VariableDeclarationSyntax || v is ParameterSyntax || v is PropertyDeclarationSyntax || v is LocalDeclarationStatementSyntax);
+
+          
+
+            
 
             var property = tree.GetRoot().DescendantNodes().OfType<PropertyDeclarationSyntax>();
             var parameter = tree.GetRoot().DescendantNodes().OfType<ParameterSyntax>();
