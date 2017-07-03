@@ -6,6 +6,9 @@
 
 namespace OneCode.View {
     using Microsoft.CodeAnalysis;
+    using Microsoft.VisualStudio.Shell;
+    using Microsoft.VisualStudio.Shell.Interop;
+    using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Windows;
     using System.Windows.Controls;
@@ -20,5 +23,6 @@ namespace OneCode.View {
         public OneCodeWindowControl() {
             this.InitializeComponent();
         }
+
     }
 }
