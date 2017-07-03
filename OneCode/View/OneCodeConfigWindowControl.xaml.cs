@@ -32,6 +32,9 @@ namespace OneCode.View {
             this.languages.DisplayMemberPath = "DisplayName";
             this.languages.ItemsSource = ciList;
 
+            this.baseLanguages.DisplayMemberPath = "DisplayName";
+            this.baseLanguages.ItemsSource = ciList;
+
             List<CodeStyle> styles = Enum.GetValues(typeof(CodeStyle)).Cast<CodeStyle>().ToList();
             this.codestyles.ItemsSource = styles;
 

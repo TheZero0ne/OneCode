@@ -7,6 +7,8 @@ using System.Text;
 using System.Xml.Linq;
 using System.Runtime.Serialization;
 using System.IO;
+using OneCode.Properties;
+using System.Threading.Tasks;
 
 namespace OneCode {
     class Translator {
@@ -27,11 +29,11 @@ namespace OneCode {
             }
         }
 
-        public static async void TranslateStringArray(string[] textArrayToTranslate) {
-            List<string> translated = new List<string>();
+        public static async Task<Dictionary<int, string>> TranslateDictionary(Dictionary<int, string> dictionaryToTranslate) {
+            Dictionary<int, string> translated = new Dictionary<int, string>();
 
-            var from = "en";
-            var to = "es";
+            var from = "" + Settings.Default.BaseLanguage;
+            var to = "" + Settings.Default.CodeLanguage;
             var uri = "https://api.microsofttranslator.com/v2/Http.svc/TranslateArray";
             var body = "<TranslateArrayRequest>" +
                            "<AppId />" +
@@ -46,7 +48,7 @@ namespace OneCode {
                            "</Options>" +
                            "<Texts>";
 
-            foreach (string s in textArrayToTranslate)
+            foreach (string s in dictionaryToTranslate.Values)
                 body += "<string xmlns=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">" + s + "</string>";
 
             body +=
@@ -72,13 +74,16 @@ namespace OneCode {
                         var ns = XNamespace.Get("http://schemas.datacontract.org/2004/07/Microsoft.MT.Web.Service.V2");
                         var sourceTextCounter = 0;
 
+                        var keys = dictionaryToTranslate.Keys.GetEnumerator();
                         foreach (XElement xe in doc.Descendants(ns + "TranslateArrayResponse")) {
                             foreach (var node in xe.Elements(ns + "TranslatedText")) {
-                                translated.Add(node.Value);
+                                keys.MoveNext();
+                                translated.Add(keys.Current, node.Value);
                             }
                             sourceTextCounter++;
                         }
 
+                        return translated;
                         break;
                     default:
                         //TODO: Exception hübsch machen

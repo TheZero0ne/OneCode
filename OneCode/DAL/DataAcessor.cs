@@ -7,9 +7,11 @@ using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using OneCode;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace DAL {
     class DataAcessor {
@@ -61,6 +63,11 @@ namespace DAL {
                 this.MySemanticModel = sm;
                 this.varCol = col;
                 this.modus = modus;
+
+                if (modus == MyRewriterModus.WRITE && (varCol == null || varCol.Count < 1))
+                {
+                    throw new InvalidOperationException("The Rewriter can only alter attributes by the given VariableCollection. It can not be empty on WRITE Mode");
+                }
             }
 
             public override SyntaxNode VisitVariableDeclarator(VariableDeclaratorSyntax node)
@@ -73,8 +80,8 @@ namespace DAL {
                     return base.VisitVariableDeclarator(node);
                 } else
                 {
-                    var newVariableName = "_" + node.Identifier.Text;
-                    var newIdentifier = SyntaxFactory.Identifier(newVariableName);
+                    Variable v = varCol.Where(x => x.SpanStart == node.SpanStart).First();
+                    var newIdentifier = SyntaxFactory.Identifier(v.Translation);
 
                     return node.WithIdentifier(newIdentifier);
                 }
@@ -83,8 +90,19 @@ namespace DAL {
 
             public override SyntaxNode VisitParameter(ParameterSyntax node)
             {
-                varCol.Add(new Variable(node.Type.ToString(), node.Identifier.Text, node.Kind().ToString(), node.SpanStart));
-                return base.VisitParameter(node);
+                if (modus == MyRewriterModus.SEARCH)
+                {
+                    varCol.Add(new Variable(node.Type.ToString(), node.Identifier.Text, node.Kind().ToString(), node.SpanStart));
+                    return base.VisitParameter(node);   
+                }
+                else
+                {
+                    Variable v = varCol.Where(x => x.SpanStart == node.SpanStart).First();
+                    var newIdentifier = SyntaxFactory.Identifier(v.Translation);
+                    return node.WithIdentifier(newIdentifier);
+                }
+
+                
             }
 
         }
@@ -93,7 +111,7 @@ namespace DAL {
         /// Checks the Syntax of an Document and adds all Locals, Fields, Parameters and Properties of the Document to the VariableCollection
         /// </summary>
         /// <param name="haystackDoc">A Document of Type EnvDTE</param>
-        public void FindVariablesInDoc(EnvDTE.TextDocument haystackDoc) {
+        public async void FindVariablesInDoc(EnvDTE.TextDocument haystackDoc) {
             varCollection = new VariableCollection();
             var objEditPt = haystackDoc.StartPoint.CreateEditPoint();
             var tree = CSharpSyntaxTree.ParseText(objEditPt.GetText(haystackDoc.EndPoint));
@@ -105,12 +123,24 @@ namespace DAL {
             Rewriter = new MyRewriter(model, varCollection, MyRewriterModus.SEARCH);
             var result = Rewriter.Visit(tree.GetRoot());
 
+            // Translate
+            var dictionary = varCollection.GetNamesDictionaryForTranslation();
+            Task<Dictionary<int, string>> translationTask = Translator.TranslateDictionary(dictionary);
+            Dictionary<int, string> translationDic = await translationTask;
+
+            varCollection.ApplyTranslationDictionary(translationDic);
+
+            // Write
+            Rewriter = new MyRewriter(model, varCollection, MyRewriterModus.WRITE);
+            result = Rewriter.Visit(tree.GetRoot());
+
             string pathHaystackDoc = haystackDoc.DTE.ActiveDocument.FullName;
             Microsoft.CodeAnalysis.Document activeCodeDoc = workspace.CurrentSolution.Projects.First().Documents.Where(d => d.FilePath == pathHaystackDoc).First();
             var solution = workspace.CurrentSolution.RemoveDocument(activeCodeDoc.Id);
             solution = solution.AddDocument(activeCodeDoc.Id, activeCodeDoc.Name, result);
 
             workspace.TryApplyChanges(solution);
+
         }
     }
 }

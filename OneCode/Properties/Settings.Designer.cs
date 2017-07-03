@@ -46,5 +46,17 @@ namespace OneCode.Properties {
                 this["CodeStyle"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("de")]
+        public global::System.Globalization.CultureInfo BaseLanguage {
+            get {
+                return ((global::System.Globalization.CultureInfo)(this["BaseLanguage"]));
+            }
+            set {
+                this["BaseLanguage"] = value;
+            }
+        }
     }
 }

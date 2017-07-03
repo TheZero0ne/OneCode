@@ -8,5 +8,8 @@
     <Setting Name="CodeStyle" Type="OneCode.CodeStyle" Scope="User">
       <Value Profile="(Default)">CamelCase</Value>
     </Setting>
+    <Setting Name="BaseLanguage" Type="System.Globalization.CultureInfo" Scope="User">
+      <Value Profile="(Default)">de</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
