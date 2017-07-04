@@ -10,20 +10,20 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              Name="ConfigWindow">
-    <Grid>
+    <DockPanel LastChildFill="False">
 
-        <Label Height="30" Width="200" Margin="10,13,90,257">Ausgangssprache</Label>
-        <ComboBox Height="30" Width="200" x:Name="baseLanguages" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=BaseLanguage}" Margin="10,43,90,227">
+        <Label DockPanel.Dock="Top" Margin="10,10,10,0" FontSize="20">Ausgangssprache</Label>
+        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="baseLanguages" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=BaseLanguage}">
         </ComboBox>
 
-        <Label Height="30" Width="200" Margin="10,81,90,189">Zielsprache</Label>
-        <ComboBox Height="30" Width="200" x:Name="languages" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=CodeLanguage}" Margin="10,111,90,159" SelectionChanged="languages_SelectionChanged">
+        <Label DockPanel.Dock="Top" Margin="10,0,10,0" FontSize="20">Zielsprache</Label>
+        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="languages" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=CodeLanguage}">
         </ComboBox>
 
-        <Label Height="30" Width="200" Margin="10,151,90,119">CodeStyle</Label>
-        <ComboBox Height="30" Width="200" x:Name="codestyles" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=CodeStyle}" Margin="10,181,90,89">
+        <Label DockPanel.Dock="Top" Margin="10,0,10,0" FontSize="20">CodeStyle</Label>
+        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="codestyles" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=CodeStyle}">
         </ComboBox>
-        <Button Content="Einstellungen speichern" HorizontalAlignment="Left" Margin="10,252,0,0" VerticalAlignment="Top" Height="30" Width="139" Click="Save_Click" IsCancel="True"/>
+        <Button DockPanel.Dock="Top" Content="Einstellungen speichern" HorizontalAlignment="Left" Margin="10,10,0,0" Height="30" Width="200" Click="Save_Click"/>
 
-    </Grid>
+    </DockPanel>
 </UserControl>

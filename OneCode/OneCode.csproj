@@ -359,7 +359,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="settings.png" />
+    <Resource Include="View\Images\settings.png" />
     <VSCTCompile Include="View\OneCodeWindowPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
