@@ -69,16 +69,32 @@ namespace DAL {
             public override SyntaxNode VisitVariableDeclarator(VariableDeclaratorSyntax node) {
                 if (modus == MyRewriterModus.SEARCH) {
                     TypeInfo initializerInfo = MySemanticModel.GetTypeInfo(node.Initializer.Value);
+
                     varCol.Add(new Variable(initializerInfo.Type.Name.ToString(), node.Identifier.Text, node.Kind().ToString(), node.SpanStart));
 
                     return base.VisitVariableDeclarator(node);
                 } else {
                     Variable v = varCol.Where(x => x.SpanStart == node.SpanStart).First();
-                    var newIdentifier = SyntaxFactory.Identifier(v.Translation.GetContentWithPrefix());
+                    var newIdentifier = SyntaxFactory.Identifier(v.Translation.GetContentWithPrefix() + node.Identifier.TrailingTrivia.ToString());
 
                     return node.WithIdentifier(newIdentifier);
                 }
+            }
 
+            public override SyntaxNode VisitIdentifierName(IdentifierNameSyntax node)
+            {
+                if (modus == MyRewriterModus.WRITE)
+                {
+                    var enumerable = varCol.Where(x => x.Name.GetContentWithPrefix() == node.Identifier.Text);
+                    if (enumerable.Count() > 0)
+                    {
+                        Variable v = enumerable.First();
+                        var newIdentifier = SyntaxFactory.Identifier(node.Identifier.LeadingTrivia.ToString() + v.Translation.GetContentWithPrefix() + node.Identifier.TrailingTrivia.ToString());
+
+                        return node.WithIdentifier(newIdentifier);
+                    }
+                }
+                return base.VisitIdentifierName(node);
             }
 
             public override SyntaxNode VisitParameter(ParameterSyntax node) {
@@ -87,10 +103,11 @@ namespace DAL {
                     return base.VisitParameter(node);   
                 } else {
                     Variable v = varCol.Where(x => x.SpanStart == node.SpanStart).First();
-                    var newIdentifier = SyntaxFactory.Identifier(v.Translation.GetContentWithPrefix());
+                    var newIdentifier = SyntaxFactory.Identifier(v.Translation.GetContentWithPrefix() + node.Identifier.TrailingTrivia.ToString());
                     return node.WithIdentifier(newIdentifier);
                 }                
             }
+
         }
 
         /// <summary>

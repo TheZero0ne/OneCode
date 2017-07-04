@@ -13,17 +13,19 @@
     <DockPanel LastChildFill="False">
 
         <Label DockPanel.Dock="Top" Margin="10,10,10,0" FontSize="20">Ausgangssprache</Label>
-        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="baseLanguages" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=BaseLanguage}">
+        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="baseLanguages" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=BaseLanguage}" SelectionChanged="settingSelectionChanged">
         </ComboBox>
 
         <Label DockPanel.Dock="Top" Margin="10,0,10,0" FontSize="20">Zielsprache</Label>
-        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="languages" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=CodeLanguage}">
+        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="languages" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=CodeLanguage}" SelectionChanged="settingSelectionChanged">
         </ComboBox>
 
         <Label DockPanel.Dock="Top" Margin="10,0,10,0" FontSize="20">CodeStyle</Label>
-        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="codestyles" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=CodeStyle}">
+        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="codestyles" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=CodeStyle}" SelectionChanged="settingSelectionChanged">
         </ComboBox>
-        <Button DockPanel.Dock="Top" Content="Einstellungen speichern" HorizontalAlignment="Left" Margin="10,10,0,0" Height="30" Width="200" Click="Save_Click"/>
+
+        <TextBlock DockPanel.Dock="Top" Margin="10,10,10,0" TextWrapping="Wrap">Die Einstellungen werden automatisch nach der Auswahl gespeichert.</TextBlock>
+        <!--<Button DockPanel.Dock="Top" Content="Einstellungen speichern" HorizontalAlignment="Left" Margin="10,10,0,0" Height="30" Width="200" Click="Save_Click"/>-->
 
     </DockPanel>
 </UserControl>
