@@ -4,13 +4,12 @@ using System.Globalization;
 namespace OneCode {
     [Serializable]
     class Variable {
-
         public CultureInfo FromLanguage { get; set; }
         public CultureInfo ToLanguage { get; set; }
         public String Type { get; set; }
-        public String Name { get; set; }
+        public VariableNameInfo Name { get; set; }
         public String Text { get; set; }
-        public String Translation { get; set; }
+        public VariableNameInfo Translation { get; set; }
         public String Kind { get; set; }
         public int SpanStart { get; set; }
 
@@ -20,11 +19,12 @@ namespace OneCode {
 
         public Variable(string _type, string _name, string _kind, int _spanStart) {
             this.Type = _type;
-            this.Name = _name;
-            this.Text = _type + " " + _name;
+            this.Name = new VariableNameInfo(_name);
+            this.Text = _type + " " + Name.Content;
             this.Kind = _kind;
             this.SpanStart = _spanStart;
         }
 
+        
     }
 }
