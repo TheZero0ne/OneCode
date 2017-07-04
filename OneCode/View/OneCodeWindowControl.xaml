@@ -13,6 +13,11 @@
     <UserControl.Resources>
         <local:VariableCollectionViewModel x:Key="vcvm">
         </local:VariableCollectionViewModel>
+        <ObjectDataProvider MethodName="GetValuesAndDescriptions" ObjectType="local:EnumUtility" x:Key="selType">
+            <ObjectDataProvider.MethodParameters>
+                <x:TypeExtension TypeName="local:SelectionType" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -26,8 +31,8 @@
                 </Button>
                 <Label DockPanel.Dock="Left" Margin="10,0,10,0" FontSize="20">Auswahl</Label>
             </DockPanel>
-            <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="selectionTypes" HorizontalAlignment="Left"/>
-
+            <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="selectionTypes" HorizontalAlignment="Left"
+                      ItemsSource="{Binding Source={StaticResource selType}}" DisplayMemberPath="Description" SelectedValuePath="Value" SelectedIndex="0"/>
             <Label DockPanel.Dock="Top" Margin="10,0,10,0" FontSize="20">Suche</Label>
             <TextBlock DockPanel.Dock="Top" Margin="10,0,10,0" TextWrapping="Wrap">Auswahl nach Variablen durchsuchen, die nicht der Konfiguration entsprechen</TextBlock>
             <Button DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="btnFindVariables" Height="30" Content="Auswahl durchsuchen" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" Width="200" HorizontalAlignment="Left" />

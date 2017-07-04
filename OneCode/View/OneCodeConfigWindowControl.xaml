@@ -10,19 +10,34 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              Name="ConfigWindow">
+    <UserControl.Resources>
+        
+        <ObjectDataProvider MethodName="GetValuesAndDescriptions" ObjectType="local:EnumUtility" x:Key="codeStyle">
+            <ObjectDataProvider.MethodParameters>
+                <x:TypeExtension TypeName="local:CodeStyle" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider MethodName="GetCultureInfo" ObjectType="local:EnumUtility" x:Key="baseLang">
+        </ObjectDataProvider>
+
+    </UserControl.Resources>
     <DockPanel LastChildFill="False">
 
         <Label DockPanel.Dock="Top" Margin="10,10,10,0" FontSize="20">Ausgangssprache</Label>
-        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="baseLanguages" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=BaseLanguage}">
+        
+        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="baseLanguages" 
+                  ItemsSource="{Binding Source={StaticResource baseLang}}" DisplayMemberPath="DisplayName" SelectedValuePath="Name" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=BaseLanguage}">
         </ComboBox>
 
         <Label DockPanel.Dock="Top" Margin="10,0,10,0" FontSize="20">Zielsprache</Label>
-        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="languages" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=CodeLanguage}">
+        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="languages" 
+                  ItemsSource="{Binding Source={StaticResource baseLang}}" DisplayMemberPath="DisplayName" SelectedValuePath="Name" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=CodeLanguage}">
         </ComboBox>
 
         <Label DockPanel.Dock="Top" Margin="10,0,10,0" FontSize="20">CodeStyle</Label>
-        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="codestyles" SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=CodeStyle}">
-        </ComboBox>
+        <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="codestyles" HorizontalAlignment="Left" 
+                  ItemsSource="{Binding Source={StaticResource codeStyle}}" DisplayMemberPath="Description" SelectedValuePath="Value" SelectedIndex="0"/>
         <Button DockPanel.Dock="Top" Content="Einstellungen speichern" HorizontalAlignment="Left" Margin="10,10,0,0" Height="30" Width="200" Click="Save_Click"/>
 
     </DockPanel>

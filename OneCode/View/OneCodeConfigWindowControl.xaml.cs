@@ -26,18 +26,6 @@ namespace OneCode.View {
         /// </summary>
         public OneCodeConfigWindowControl() {
             this.InitializeComponent();
-
-            //Populate CultureInfos
-            List<CultureInfo> ciList = new List<CultureInfo>(CultureInfo.GetCultures(CultureTypes.AllCultures));
-            this.languages.DisplayMemberPath = "DisplayName";
-            this.languages.ItemsSource = ciList;
-
-            this.baseLanguages.DisplayMemberPath = "DisplayName";
-            this.baseLanguages.ItemsSource = ciList;
-
-            List<CodeStyle> styles = Enum.GetValues(typeof(CodeStyle)).Cast<CodeStyle>().ToList();
-            this.codestyles.ItemsSource = styles;
-
         }
 
         private void languages_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -26,11 +26,6 @@ namespace OneCode.View {
         /// </summary>
         public OneCodeWindowControl() {
             this.InitializeComponent();
-
-            List<SelectionType> selectionTypes = Enum.GetValues(typeof(SelectionType)).Cast<SelectionType>().ToList();
-            this.selectionTypes.ItemsSource = selectionTypes;
-            this.selectionTypes.SelectedItem = selectionTypes.First();
-            //this.selectionTypes.DisplayMemberPath = "Description";
         }
 
         private void btnOpenConfig_Click(object sender, RoutedEventArgs e)

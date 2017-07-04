@@ -5,13 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OneCode
-{
+namespace OneCode {
     /// <summary>
     ///  Definiert den Such- und Anwendungsradius für OneCode 
     /// </summary>
-    public enum SelectionType
-    {
+    public enum SelectionType {
         [Description("aktuelles (offenes) Dokument")]
         CurrentDocument,
 

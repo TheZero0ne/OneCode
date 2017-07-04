@@ -67,6 +67,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\Command\RelayCommand.cs" />
+    <Compile Include="ViewModel\EnumUtility.cs" />
     <Compile Include="ViewModel\VariableCollectionViewModel.cs" />
     <Compile Include="ViewModel\VariableViewModel.cs" />
     <Compile Include="View\OneCodeConfigWindow.cs" />
