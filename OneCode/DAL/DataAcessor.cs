@@ -46,65 +46,51 @@ namespace DAL {
 
         private MyRewriter Rewriter { get; set; }
 
-        public enum MyRewriterModus
-        {
+        public enum MyRewriterModus {
             SEARCH,
             WRITE
         }
 
         public class MyRewriter : CSharpSyntaxRewriter {
-
             private readonly SemanticModel MySemanticModel;
             private VariableCollection varCol;
             private MyRewriterModus modus;
 
-            public MyRewriter(SemanticModel sm, VariableCollection col, MyRewriterModus modus)
-            {
+            public MyRewriter(SemanticModel sm, VariableCollection col, MyRewriterModus modus) {
                 this.MySemanticModel = sm;
                 this.varCol = col;
                 this.modus = modus;
 
-                if (modus == MyRewriterModus.WRITE && (varCol == null || varCol.Count < 1))
-                {
+                if (modus == MyRewriterModus.WRITE && (varCol == null || varCol.Count < 1)) {
                     throw new InvalidOperationException("The Rewriter can only alter attributes by the given VariableCollection. It can not be empty on WRITE Mode");
                 }
             }
 
-            public override SyntaxNode VisitVariableDeclarator(VariableDeclaratorSyntax node)
-            {
-                if (modus == MyRewriterModus.SEARCH)
-                {
+            public override SyntaxNode VisitVariableDeclarator(VariableDeclaratorSyntax node) {
+                if (modus == MyRewriterModus.SEARCH) {
                     TypeInfo initializerInfo = MySemanticModel.GetTypeInfo(node.Initializer.Value);
                     varCol.Add(new Variable(initializerInfo.Type.Name.ToString(), node.Identifier.Text, node.Kind().ToString(), node.SpanStart));
 
                     return base.VisitVariableDeclarator(node);
-                } else
-                {
+                } else {
                     Variable v = varCol.Where(x => x.SpanStart == node.SpanStart).First();
-                    var newIdentifier = SyntaxFactory.Identifier(v.Translation);
+                    var newIdentifier = SyntaxFactory.Identifier(v.Translation.GetContentWithPrefix());
 
                     return node.WithIdentifier(newIdentifier);
                 }
 
             }
 
-            public override SyntaxNode VisitParameter(ParameterSyntax node)
-            {
-                if (modus == MyRewriterModus.SEARCH)
-                {
+            public override SyntaxNode VisitParameter(ParameterSyntax node) {
+                if (modus == MyRewriterModus.SEARCH) {
                     varCol.Add(new Variable(node.Type.ToString(), node.Identifier.Text, node.Kind().ToString(), node.SpanStart));
                     return base.VisitParameter(node);   
-                }
-                else
-                {
+                } else {
                     Variable v = varCol.Where(x => x.SpanStart == node.SpanStart).First();
-                    var newIdentifier = SyntaxFactory.Identifier(v.Translation);
+                    var newIdentifier = SyntaxFactory.Identifier(v.Translation.GetContentWithPrefix());
                     return node.WithIdentifier(newIdentifier);
-                }
-
-                
+                }                
             }
-
         }
 
         /// <summary>
@@ -125,8 +111,8 @@ namespace DAL {
 
             // Translate
             var dictionary = varCollection.GetNamesDictionaryForTranslation();
-            Task<Dictionary<int, string>> translationTask = Translator.TranslateDictionary(dictionary);
-            Dictionary<int, string> translationDic = await translationTask;
+            Task<Dictionary<int, VariableNameInfo>> translationTask = Translator.TranslateDictionary(dictionary);
+            Dictionary<int, VariableNameInfo> translationDic = await translationTask;
 
             varCollection.ApplyTranslationDictionary(translationDic);
 

@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace OneCode {
     class Translator {
-        public static void TranslateString(string textToTranslate) {
-
-            string from = "en";
-            string to = "de";
+        public static string TranslateString(string textToTranslate) {
+            string translatedString = "";
+            string from = "" + Settings.Default.BaseLanguage;
+            string to = "" + Settings.Default.CodeLanguage;
             string uri = "https://api.microsofttranslator.com/V2/Http.svc/Translate?text=" + HttpUtility.UrlEncode(textToTranslate) + "&from=" + from + "&to=" + to;
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
             httpWebRequest.Headers.Add("Authorization", AccessToken.GetInstance().GetBearer());
@@ -24,13 +24,14 @@ namespace OneCode {
 
             using (Stream stream = response.GetResponseStream()) {
                 DataContractSerializer dcs = new DataContractSerializer(Type.GetType("System.String"));
-                string translation = (string)dcs.ReadObject(stream);
-                //TODO: Übersetzung machen
+                translatedString = (string)dcs.ReadObject(stream);
             }
+
+            return translatedString;
         }
 
-        public static async Task<Dictionary<int, string>> TranslateDictionary(Dictionary<int, string> dictionaryToTranslate) {
-            Dictionary<int, string> translated = new Dictionary<int, string>();
+        public static async Task<Dictionary<int, VariableNameInfo>> TranslateDictionary(Dictionary<int, VariableNameInfo> dictionaryToTranslate) {
+            Dictionary<int, VariableNameInfo> translated = new Dictionary<int, VariableNameInfo>();
 
             var from = "" + Settings.Default.BaseLanguage;
             var to = "" + Settings.Default.CodeLanguage;
@@ -48,8 +49,8 @@ namespace OneCode {
                            "</Options>" +
                            "<Texts>";
 
-            foreach (string s in dictionaryToTranslate.Values)
-                body += "<string xmlns=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">" + s + "</string>";
+            foreach (VariableNameInfo s in dictionaryToTranslate.Values)
+                body += "<string xmlns=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">" + s.Content + "</string>";
 
             body +=
                            "</Texts>" +
@@ -59,7 +60,6 @@ namespace OneCode {
 
             using (var client = new HttpClient())
             using (var request = new HttpRequestMessage()) {
-
                 request.Method = HttpMethod.Post;
                 request.RequestUri = new Uri(uri);
                 request.Content = new StringContent(requestBody, Encoding.UTF8, "text/xml");
@@ -78,13 +78,12 @@ namespace OneCode {
                         foreach (XElement xe in doc.Descendants(ns + "TranslateArrayResponse")) {
                             foreach (var node in xe.Elements(ns + "TranslatedText")) {
                                 keys.MoveNext();
-                                translated.Add(keys.Current, node.Value);
+                                translated.Add(keys.Current, new VariableNameInfo(node.Value, dictionaryToTranslate[keys.Current].Prefix));
                             }
                             sourceTextCounter++;
                         }
 
                         return translated;
-                        break;
                     default:
                         //TODO: Exception hübsch machen
                         throw new Exception("Geht nicht");
