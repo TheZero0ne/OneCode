@@ -17,6 +17,17 @@ namespace OneCode {
                 splitString = s.Replace("_", " ").Trim();
             }
 
+            foreach (Char c in splitString)
+            {
+                if (Char.IsDigit(c)) { 
+                    splitString = splitString.Insert(splitString.IndexOf(c), " ");
+                    splitString = splitString.Insert(splitString.IndexOf(c), " ");
+                }
+
+            }
+
+            splitString = Regex.Replace(splitString, "  ", " ", RegexOptions.Compiled);
+
             return splitString.Length > 0 ? splitString : s;
         }
 

@@ -28,15 +28,11 @@ namespace OneCode.View {
             this.InitializeComponent();
         }
 
-        private void languages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void settingSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //MessageBox.Show("Sprache in Settings beim Change " + Settings.Default.CodeLanguage.DisplayName);
+            // Save Settings on every Settings-Change
+            Settings.Default.Save();
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
-        {
-            Settings.Default.Save();
-            this.Visibility = Visibility.Hidden;
-        }
     }
 }
