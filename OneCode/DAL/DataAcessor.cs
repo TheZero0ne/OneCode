@@ -146,4 +146,23 @@ namespace DAL {
 
         }
     }
+
+    /*
+     * 
+     *  TODOs 
+     *  -   Anzeige der Variablen nach Dokument sortiert
+     *     - Übersetzung bearbeitbar
+     *     
+     *  -   SelectionType auswerten -> Einschränkung für die Dokumentenauswahl
+     *     - Wie Save ich automatisch / programmatisch den ganzen Workspace?
+     *     - Kann der Benutzer auswählen, ob direkt gespeichert oder nur geändert wird?!
+     *     
+     *  -   akt. Selection Umwandeln
+     *  
+     *  -   OneCode Funktionen als Menü / Toolbar Button + HotKey(s)
+     *  
+     *  -   Dokumentation ^-^
+     * 
+     * 
+     */
 }

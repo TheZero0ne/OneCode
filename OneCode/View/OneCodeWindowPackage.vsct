@@ -52,7 +52,7 @@
       </Button>
       <Button guid="guidOneCodeWindowPackageCmdSet" id="OneCodeConfigWindowCommandId" priority="0x0100" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
-        <Icon guid="guidImages" id="bmpPic1" />
+        <Icon guid="guidConfigImages" id="configIcon1" />
         <Strings>
           <ButtonText>OneCodeConfigWindow</ButtonText>
         </Strings>
@@ -67,6 +67,7 @@
             inside a button definition. An important aspect of this declaration is that the element id
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
       <Bitmap guid="guidImages" href="Resources\OneCodeWindowCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
+      <Bitmap guid="guidConfigImages" href="Resources\settings.png" usedList="configIcon1"/>
     </Bitmaps>
   </Commands>
 
@@ -80,7 +81,12 @@
       <IDSymbol name="OneCodeConfigWindowCommandId" value="0x0200" />
     </GuidSymbol>
 
-    <GuidSymbol name="guidImages" value="{c714436a-d04b-4987-8cb3-e203b15dd032}" >
+    <GuidSymbol name="guidConfigImages" value="{5E1E554D-9A3C-4541-9D90-077E84EE3AA8}">
+      <IDSymbol name="configIcon1" value="1" />
+    </GuidSymbol>
+
+
+     <GuidSymbol name="guidImages" value="{c714436a-d04b-4987-8cb3-e203b15dd032}" >
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />
       <IDSymbol name="bmpPicSearch" value="3" />
