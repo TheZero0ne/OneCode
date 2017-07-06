@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:OneCode"
              xmlns:properties="clr-namespace:OneCode.Properties"
+             xmlns:dal="clr-namespace:DAL"
              Background="{DynamicResource VsBrush.Window}"
              Foreground="{DynamicResource VsBrush.WindowText}"
              mc:Ignorable="d"
@@ -37,7 +38,53 @@
             <TextBlock DockPanel.Dock="Top" Margin="10,0,10,0" TextWrapping="Wrap">Auswahl nach Variablen durchsuchen, die nicht der Konfiguration entsprechen</TextBlock>
             <Button DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="btnFindVariables" Height="30" Content="Auswahl durchsuchen" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" Width="200" HorizontalAlignment="Left" />
             <Button DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="testExec" Height="30" Content="Markiertes übersetzen" Command="{Binding translateSelected, Mode=OneWay, Source={StaticResource vcvm}}" Width="200" HorizontalAlignment="Left" />
-            <ListBox DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="lbVariables" ItemsSource="{Binding Source={StaticResource vcvm}}">
+
+            <DataGrid DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="lbVariables" ItemsSource="{Binding Source={StaticResource vcvm}}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Kind" Width="SizeToCells" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Kind}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Type" Width="SizeToCells" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Type}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Name" Width="SizeToCells" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Var.Name.Content}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <DataGridTemplateColumn Header="Translation" Width="SizeToCells" IsReadOnly="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Var.Translation.Content}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+
+                <!--<DataGrid.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=Text}"/>
+                            <TextBlock Text="{Binding Path=Kind}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </DataGrid.ItemTemplate>-->
+            </DataGrid>
+
+            <!--<ListBox DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="lbVariables" ItemsSource="{Binding Source={StaticResource vcvm}}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -46,7 +93,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-            </ListBox>
+            </ListBox>-->
         </DockPanel>
 
         <Button Grid.Row="1" Grid.RowSpan="1" Margin="10,10,0,10" x:Name="btnSaveChanges" Height="30" Content="Änderungen speichern" Width="200" HorizontalAlignment="Left" />

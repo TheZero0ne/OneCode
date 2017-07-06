@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
 using Microsoft.VisualStudio.Shell;
+using System.Windows.Data;
 using OneCode.View;
 
 namespace OneCode {
@@ -15,6 +16,9 @@ namespace OneCode {
 
         public VariableCollectionViewModel() {
             findVariablesInDoc = new RelayCommand(this.FindVariablesInDoc, this.SyncDisabled);
+
+            this.CollectionChanged += ViewModelCollectionChanged;
+            DataAcessor.getInstance().varCollection.CollectionChanged += ModelCollectionChanged;
             testExec = new RelayCommand(this.TestExec, this.SyncDisabled);
         }
 
@@ -61,10 +65,10 @@ namespace OneCode {
         public ICommand findVariablesInDocClick { get { return findVariablesInDoc; } }
         public ICommand translateSelected { get { return testExec; } }
 
-        public void FindVariablesInDoc() {
+        public async void FindVariablesInDoc() {
             TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
 
-            DataAcessor.getInstance().FindVariablesInDoc(activeDoc);
+            await DataAcessor.getInstance().FindVariablesInDoc(activeDoc);
             FetchFromModels();
         }
 
@@ -74,5 +78,21 @@ namespace OneCode {
         }
 
         #endregion
+
+        public ListCollectionView CollectionView {
+            get {
+                ListCollectionView vars = new ListCollectionView(this);
+                vars.GroupDescriptions.Add(new PropertyGroupDescription("Variablen"));
+
+                return vars;
+            }
+        }
+
+        public ListCollectionView collectionView() {
+            ListCollectionView vars = new ListCollectionView(this);
+            vars.GroupDescriptions.Add(new PropertyGroupDescription("Variablen"));
+
+            return vars;
+        }
     }
 }
