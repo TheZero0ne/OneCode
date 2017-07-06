@@ -24,7 +24,5 @@ namespace OneCode {
             this.Kind = _kind;
             this.SpanStart = _spanStart;
         }
-
-        
     }
 }

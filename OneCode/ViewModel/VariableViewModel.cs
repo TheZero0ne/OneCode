@@ -21,9 +21,32 @@ namespace OneCode {
             set { Var.Text = value; }
         }
 
+        public string Type {
+            get { return Var.Type; }
+            set { Var.Type = value; }
+        }
+
         public string Kind {
             get { return Var.Kind; }
             set { Var.Kind = value; }
+        }
+
+        public VariableNameInfo Name {
+            get {
+                return Var.Name;
+            }
+            set {
+                Var.Name = value;
+            }
+        }
+
+        public VariableNameInfo Translation {
+            get {
+                return Var.Translation;
+            }
+            set {
+                Var.Translation = value;
+            }
         }
     }
 }

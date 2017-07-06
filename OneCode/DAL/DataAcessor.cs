@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace DAL {
     class DataAcessor {
@@ -31,6 +32,13 @@ namespace DAL {
                     workspaceWasSet = true;
                 }
             }
+        }
+
+        public ListCollectionView collectionView() {
+            ListCollectionView vars = new ListCollectionView(varCollection);
+            vars.GroupDescriptions.Add(new PropertyGroupDescription("Variablen"));
+
+            return vars;
         }
 
         private DataAcessor() {
@@ -114,7 +122,7 @@ namespace DAL {
         /// Checks the Syntax of an Document and adds all Locals, Fields, Parameters and Properties of the Document to the VariableCollection
         /// </summary>
         /// <param name="haystackDoc">A Document of Type EnvDTE</param>
-        public async void FindVariablesInDoc(EnvDTE.TextDocument haystackDoc) {
+        public async Task<VariableCollection> FindVariablesInDoc(EnvDTE.TextDocument haystackDoc) {
             varCollection = new VariableCollection();
             var objEditPt = haystackDoc.StartPoint.CreateEditPoint();
             var tree = CSharpSyntaxTree.ParseText(objEditPt.GetText(haystackDoc.EndPoint));
@@ -144,6 +152,7 @@ namespace DAL {
 
             workspace.TryApplyChanges(solution);
 
+            return this.varCollection;
         }
     }
 
