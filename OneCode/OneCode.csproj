@@ -72,6 +72,7 @@
     <Compile Include="ViewModel\VariableViewModel.cs" />
     <Compile Include="View\OneCodeConfigWindow.cs" />
     <Compile Include="View\OneCodeConfigWindowCommand.cs" />
+    <Compile Include="View\OneCodeTranslateSelectionCommand.cs" />
     <Compile Include="View\OneCodeWindow.cs" />
     <Compile Include="View\OneCodeWindowCommand.cs" />
     <Compile Include="View\OneCodeConfigWindowControl.xaml.cs">
@@ -362,6 +363,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="View\Resources\settings.png" />
+    <Resource Include="View\Resources\translation.png" />
     <Resource Include="View\Images\settings.png" />
     <VSCTCompile Include="View\OneCodeWindowPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>

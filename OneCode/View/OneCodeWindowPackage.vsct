@@ -31,6 +31,22 @@
     group; your package should define its own command set in order to avoid collisions
     with command ids defined by other packages. -->
 
+    <Menus>
+      <Menu guid="guidOneCodeWindowPackageCmdSet" id="OneCodeMenuCommandId" priority="0x700" type="Menu">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS"/>
+        <Strings>
+          <ButtonText>OneCode</ButtonText>
+          <CommandName>OneCode</CommandName>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Groups>
+      <Group guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId" priority="0x0600">
+        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeMenuCommandId"/>
+      </Group>
+    </Groups>
+
     <!--Buttons section. -->
     <!--This section defines the elements the user can interact with, like a menu command or a button
         or combo box in a toolbar. -->
@@ -41,22 +57,33 @@
           You can add more than one CommandFlag node e.g.:
               <CommandFlag>DefaultInvisible</CommandFlag>
               <CommandFlag>DynamicVisibility</CommandFlag>
-          If you do not want an image next to your command, remove the Icon node /> -->     
+          If you do not want an image next to your command, remove the Icon node /> -->
+
+
+      <Button guid="guidOneCodeWindowPackageCmdSet" id="OneCodeTranslateSelectionCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId"/>
+        <Icon guid="guidTranslateImages" id="translateIcon1" />
+        <Strings>
+          <ButtonText>Auswahl übersetzen</ButtonText>
+        </Strings>
+      </Button>
       
       <Button guid="guidOneCodeWindowPackageCmdSet" id="OneCodeWindowCommandId" priority="0x0100" type="Button">
-        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
+        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId"/>
         <Icon guid="guidImages" id="bmpPicSearch" />
         <Strings>
           <ButtonText>OneCodeWindow</ButtonText>
         </Strings>
       </Button>
+
       <Button guid="guidOneCodeWindowPackageCmdSet" id="OneCodeConfigWindowCommandId" priority="0x0100" type="Button">
-        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
+        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId"/>
         <Icon guid="guidConfigImages" id="configIcon1" />
         <Strings>
           <ButtonText>OneCodeConfigWindow</ButtonText>
         </Strings>
       </Button>
+      
     </Buttons>
 
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
@@ -68,6 +95,7 @@
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
       <Bitmap guid="guidImages" href="Resources\OneCodeWindowCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
       <Bitmap guid="guidConfigImages" href="Resources\settings.png" usedList="configIcon1"/>
+      <Bitmap guid="guidTranslateImages" href="Resources\translation.png" usedList="translateIcon1"/>
     </Bitmaps>
   </Commands>
 
@@ -77,14 +105,20 @@
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidOneCodeWindowPackageCmdSet" value="{d03c75b2-2b27-4579-90dd-218e00903302}">
-      <IDSymbol name="OneCodeWindowCommandId" value="0x0100" />
-      <IDSymbol name="OneCodeConfigWindowCommandId" value="0x0200" />
+      <IDSymbol name="OneCodeMenuCommandId" value="0x1021"/>
+      <IDSymbol name="OneCodeGroupId" value="0x1010"/>
+      <IDSymbol name="OneCodeWindowCommandId" value="0x0100"/>
+      <IDSymbol name="OneCodeConfigWindowCommandId" value="0x0200"/>
+      <IDSymbol name="OneCodeTranslateSelectionCommandId" value="0x0300"/>
     </GuidSymbol>
 
     <GuidSymbol name="guidConfigImages" value="{5E1E554D-9A3C-4541-9D90-077E84EE3AA8}">
       <IDSymbol name="configIcon1" value="1" />
     </GuidSymbol>
 
+    <GuidSymbol name="guidTranslateImages" value="{66BA17AA-7E71-4B82-AEFD-7A517F452CF2}">
+      <IDSymbol name="translateIcon1" value="1" />
+    </GuidSymbol>
 
      <GuidSymbol name="guidImages" value="{c714436a-d04b-4987-8cb3-e203b15dd032}" >
       <IDSymbol name="bmpPic1" value="1" />
