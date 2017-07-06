@@ -12,7 +12,14 @@ using System.Threading.Tasks;
 
 namespace OneCode {
     class Translator {
-        public static string TranslateString(string textToTranslate) {
+        public static async Task<string> TranslateString(string textToTranslate) {
+
+            // If the text needs to be separated for translation automaticly use the dictonary method
+            if (textToTranslate != null && VariableFormatter.SplitString(textToTranslate).Contains(" "))
+            {
+                return await TranslateAsDictonary(textToTranslate);
+            }
+
             string translatedString = "";
             string from = "" + Settings.Default.BaseLanguage;
             string to = "" + Settings.Default.CodeLanguage;
@@ -29,6 +36,23 @@ namespace OneCode {
 
             return translatedString;
         }
+
+        private static async Task<string> TranslateAsDictonary(string textToTranslate)
+        {
+            VariableCollection varCollection = new VariableCollection();
+
+            // add textToTranslate
+            varCollection.Add(new Variable("", textToTranslate, "", 0));
+
+            var dictionary = varCollection.GetNamesDictionaryForTranslation();
+            Task<Dictionary<int, VariableNameInfo>> translationTask = TranslateDictionary(dictionary);
+            Dictionary<int, VariableNameInfo> translationDic = await translationTask;
+
+            varCollection.ApplyTranslationDictionary(translationDic);
+
+            return varCollection[0].Translation.GetContentWithPrefix();
+        }
+
 
         public static async Task<Dictionary<int, VariableNameInfo>> TranslateDictionary(Dictionary<int, VariableNameInfo> dictionaryToTranslate) {
             Dictionary<int, VariableNameInfo> translated = new Dictionary<int, VariableNameInfo>();

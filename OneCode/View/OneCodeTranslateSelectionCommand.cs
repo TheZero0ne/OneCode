@@ -9,6 +9,9 @@ using System.ComponentModel.Design;
 using System.Globalization;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Windows;
+using EnvDTE;
+using OneCode;
 
 namespace OneCode.View
 {
@@ -25,11 +28,21 @@ namespace OneCode.View
         /// <summary>
         /// Command menu group (command set GUID).
         /// </summary>
-        public static readonly Guid CommandSet = new Guid("5E1E554D-9A3C-4541-9D90-077E84EE3AA8");
+        public static readonly Guid CommandSet = new Guid("A1221E65-866E-4F9F-B041-0AF3541C1771");
         /// <summary>
         /// VS Package that provides this command, not null.
         /// </summary>
         private readonly Package package;
+
+        private DTE _dte = null;
+        private DTE GetDTE()
+        {
+            if (_dte == null)
+            {
+                _dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
+            }
+            return _dte;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OneCodeTranslateSelectionCommand"/> class.
@@ -83,14 +96,51 @@ namespace OneCode.View
             Instance = new OneCodeTranslateSelectionCommand(package);
         }
 
+        private void BeforeQueryStatus(object sender, EventArgs e)
+        {
+            OleMenuCommand pasteCommand = (OleMenuCommand)sender;
+
+            // disabled by default
+            pasteCommand.Enabled = false;
+
+            Document activeDoc = GetDTE().ActiveDocument;
+            if (activeDoc != null && activeDoc.ProjectItem != null && activeDoc.ProjectItem.ContainingProject != null)
+            {
+                // enable command, if there is text selected
+                var selection = (TextSelection)activeDoc.Selection;
+                pasteCommand.Enabled = selection != null && selection.Text.Length > 0;
+            }
+        }
+
+
         /// <summary>
         /// Translates the currentSelected
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event args.</param>
-        private void TranslateSelection(object sender, EventArgs e)
+        public async void TranslateSelection(object sender, EventArgs e)
         {
             
+            DTE dte = GetDTE();
+            try {
+                dte.UndoContext.Open("Übersetze Auswahl");
+
+                var selection = (TextSelection)dte.ActiveDocument.Selection;
+                if (selection != null)
+                {
+                    string selectedText = selection.Text;
+                    string splitted = VariableFormatter.SplitString(selectedText);
+                    string translation = await Translator.TranslateString(splitted);
+
+                    selection.ReplacePattern(selectedText, translation);
+                    dte.ActiveDocument.Activate();
+                    dte.ExecuteCommand("Edit.FormatDocument");
+                }
+            }
+            finally
+            {
+                dte.UndoContext.Close();
+            }
         }
     }
 }

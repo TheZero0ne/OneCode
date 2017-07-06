@@ -46,7 +46,7 @@ namespace OneCode.View {
         public const string PackageGuidString = "3294be3f-4de1-4135-a302-2542ff48d271";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OneCodeWindow"/> class.
+        /// Initializes a new instance of the <see cref="OneCodeWindowPackage"/> class.
         /// </summary>
         public OneCodeWindowPackage() {
             // Inside this method you can place any initialization code that does not require
@@ -70,6 +70,7 @@ namespace OneCode.View {
 
             OneCodeWindowCommand.Initialize(this);
             OneCodeConfigWindowCommand.Initialize(this);
+            OneCodeTranslateSelectionCommand.Initialize(this);
             base.Initialize();
         }
 

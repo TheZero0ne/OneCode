@@ -36,6 +36,7 @@
             <Label DockPanel.Dock="Top" Margin="10,0,10,0" FontSize="20">Suche</Label>
             <TextBlock DockPanel.Dock="Top" Margin="10,0,10,0" TextWrapping="Wrap">Auswahl nach Variablen durchsuchen, die nicht der Konfiguration entsprechen</TextBlock>
             <Button DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="btnFindVariables" Height="30" Content="Auswahl durchsuchen" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" Width="200" HorizontalAlignment="Left" />
+            <Button DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="testExec" Height="30" Content="Markiertes übersetzen" Command="{Binding translateSelected, Mode=OneWay, Source={StaticResource vcvm}}" Width="200" HorizontalAlignment="Left" />
             <ListBox DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="lbVariables" ItemsSource="{Binding Source={StaticResource vcvm}}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

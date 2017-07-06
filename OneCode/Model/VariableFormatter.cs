@@ -19,7 +19,7 @@ namespace OneCode {
 
             foreach (Char c in splitString)
             {
-                if (Char.IsDigit(c)) { 
+                if (!Char.IsLetter(c)) { 
                     splitString = splitString.Insert(splitString.IndexOf(c), " ");
                     splitString = splitString.Insert(splitString.IndexOf(c), " ");
                 }
@@ -34,6 +34,7 @@ namespace OneCode {
         public static string MergeString(string s) {
             string mergedString = "";
             string[] parts = s.Split(' ');
+            parts = parts.Where(x => x.Length > 0).ToArray();
 
             if (Settings.Default.CodeStyle == CodeStyle.CamelCase) {
                 int i = 0;

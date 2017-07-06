@@ -60,19 +60,13 @@
           If you do not want an image next to your command, remove the Icon node /> -->
 
 
-      <Button guid="guidOneCodeWindowPackageCmdSet" id="OneCodeTranslateSelectionCommandId" priority="0x0100" type="Button">
-        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId"/>
-        <Icon guid="guidTranslateImages" id="translateIcon1" />
-        <Strings>
-          <ButtonText>Auswahl übersetzen</ButtonText>
-        </Strings>
-      </Button>
+
       
       <Button guid="guidOneCodeWindowPackageCmdSet" id="OneCodeWindowCommandId" priority="0x0100" type="Button">
         <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId"/>
         <Icon guid="guidImages" id="bmpPicSearch" />
         <Strings>
-          <ButtonText>OneCodeWindow</ButtonText>
+          <ButtonText>OneCode - Suchen/Ersetzen</ButtonText>
         </Strings>
       </Button>
 
@@ -80,7 +74,15 @@
         <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId"/>
         <Icon guid="guidConfigImages" id="configIcon1" />
         <Strings>
-          <ButtonText>OneCodeConfigWindow</ButtonText>
+          <ButtonText>OneCode - Konfiguration</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidOneCodeWindowPackageCmdSet" id="OneCodeTranslateSelectionCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId"/>
+        <Icon guid="guidTranslateImages" id="translateIcon1" />
+        <Strings>
+          <ButtonText>OneCode - Aktuelle Auswahl übersetzen</ButtonText>
         </Strings>
       </Button>
       
