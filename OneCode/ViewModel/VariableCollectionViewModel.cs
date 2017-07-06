@@ -11,7 +11,6 @@ using OneCode.View;
 namespace OneCode {
     class VariableCollectionViewModel : ObservableCollection<VariableViewModel> {
         private RelayCommand findVariablesInDoc;
-        private RelayCommand testExec;
         private bool syncDisabled = false;
 
         public VariableCollectionViewModel() {
@@ -19,7 +18,6 @@ namespace OneCode {
 
             this.CollectionChanged += ViewModelCollectionChanged;
             DataAcessor.getInstance().varCollection.CollectionChanged += ModelCollectionChanged;
-            testExec = new RelayCommand(this.TestExec, this.SyncDisabled);
         }
 
         public void FetchFromModels() {
@@ -63,18 +61,12 @@ namespace OneCode {
         #region Commands
 
         public ICommand findVariablesInDocClick { get { return findVariablesInDoc; } }
-        public ICommand translateSelected { get { return testExec; } }
 
         public async void FindVariablesInDoc() {
             TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
 
             await DataAcessor.getInstance().FindVariablesInDoc(activeDoc);
             FetchFromModels();
-        }
-
-        public void TestExec()
-        {
-            OneCodeTranslateSelectionCommand.Instance.TranslateSelection(this, null);
         }
 
         #endregion

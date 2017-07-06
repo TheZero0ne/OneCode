@@ -15,10 +15,10 @@
         defining some of the constants that we will use inside the file. -->
 
   <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
-  <Extern href="stdidcmd.h"/>
+  <Extern href="stdidcmd.h" />
 
   <!--This header contains the command ids for the menus provided by the shell. -->
-  <Extern href="vsshlids.h"/>
+  <Extern href="vsshlids.h" />
 
   <!--The Commands section is where commands, menus, and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
@@ -33,7 +33,7 @@
 
     <Menus>
       <Menu guid="guidOneCodeWindowPackageCmdSet" id="OneCodeMenuCommandId" priority="0x700" type="Menu">
-        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS"/>
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
         <Strings>
           <ButtonText>OneCode</ButtonText>
           <CommandName>OneCode</CommandName>
@@ -43,7 +43,7 @@
 
     <Groups>
       <Group guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId" priority="0x0600">
-        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeMenuCommandId"/>
+        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeMenuCommandId" />
       </Group>
     </Groups>
 
@@ -63,7 +63,7 @@
 
       
       <Button guid="guidOneCodeWindowPackageCmdSet" id="OneCodeWindowCommandId" priority="0x0100" type="Button">
-        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId"/>
+        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId" />
         <Icon guid="guidImages" id="bmpPicSearch" />
         <Strings>
           <ButtonText>OneCode - Suchen/Ersetzen</ButtonText>
@@ -71,21 +71,31 @@
       </Button>
 
       <Button guid="guidOneCodeWindowPackageCmdSet" id="OneCodeConfigWindowCommandId" priority="0x0100" type="Button">
-        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId"/>
+        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId" />
         <Icon guid="guidConfigImages" id="configIcon1" />
         <Strings>
           <ButtonText>OneCode - Konfiguration</ButtonText>
         </Strings>
       </Button>
 
+      <!--
       <Button guid="guidOneCodeWindowPackageCmdSet" id="OneCodeTranslateSelectionCommandId" priority="0x0100" type="Button">
-        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId"/>
+        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId" />
         <Icon guid="guidTranslateImages" id="translateIcon1" />
         <Strings>
           <ButtonText>OneCode - Aktuelle Auswahl übersetzen</ButtonText>
         </Strings>
       </Button>
+      -->
+
       
+      <Button guid="guidOneCodeWindowPackageCmdSet1" id="cmdidMyQuickTransalationCommand" priority="0x0100" type="Button">
+        <Parent guid="guidOneCodeWindowPackageCmdSet" id="OneCodeGroupId" />
+        <Icon guid="guidTranslateImages" id="translateIcon1" />
+        <Strings>
+          <ButtonText>OneCode - Aktuelle Auswahl übersetzen</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
 
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
@@ -95,9 +105,10 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
             inside a button definition. An important aspect of this declaration is that the element id
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages" href="Resources\OneCodeWindowCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
-      <Bitmap guid="guidConfigImages" href="Resources\settings.png" usedList="configIcon1"/>
-      <Bitmap guid="guidTranslateImages" href="Resources\translation.png" usedList="translateIcon1"/>
+      <Bitmap guid="guidImages" href="Resources\OneCodeWindowCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidConfigImages" href="Resources\settings.png" usedList="configIcon1" />
+      <Bitmap guid="guidTranslateImages" href="Resources\translation.png" usedList="translateIcon1" />
+      <Bitmap guid="guidImages1" href="..\Resources\MyQuickTransalationCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
     </Bitmaps>
   </Commands>
 
@@ -107,11 +118,11 @@
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidOneCodeWindowPackageCmdSet" value="{d03c75b2-2b27-4579-90dd-218e00903302}">
-      <IDSymbol name="OneCodeMenuCommandId" value="0x1021"/>
-      <IDSymbol name="OneCodeGroupId" value="0x1010"/>
-      <IDSymbol name="OneCodeWindowCommandId" value="0x0100"/>
-      <IDSymbol name="OneCodeConfigWindowCommandId" value="0x0200"/>
-      <IDSymbol name="OneCodeTranslateSelectionCommandId" value="0x0300"/>
+      <IDSymbol name="OneCodeMenuCommandId" value="0x1021" />
+      <IDSymbol name="OneCodeGroupId" value="0x1010" />
+      <IDSymbol name="OneCodeWindowCommandId" value="0x0100" />
+      <IDSymbol name="OneCodeConfigWindowCommandId" value="0x0200" />
+      <IDSymbol name="OneCodeTranslateSelectionCommandId" value="0x0300" />
     </GuidSymbol>
 
     <GuidSymbol name="guidConfigImages" value="{5E1E554D-9A3C-4541-9D90-077E84EE3AA8}">
@@ -122,7 +133,21 @@
       <IDSymbol name="translateIcon1" value="1" />
     </GuidSymbol>
 
-     <GuidSymbol name="guidImages" value="{c714436a-d04b-4987-8cb3-e203b15dd032}" >
+     <GuidSymbol name="guidImages" value="{c714436a-d04b-4987-8cb3-e203b15dd032}">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{6bd9e375-9b77-4964-b500-4a74e796e233}" name="guidOneCodeWindowPackageCmdSet1">
+      <IDSymbol value="4128" name="MyMenuGroup" />
+      <IDSymbol value="256" name="cmdidMyQuickTransalationCommand" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{d3e70d92-f301-47f2-b9e9-ab19c816733a}" name="guidImages1">
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />
       <IDSymbol name="bmpPicSearch" value="3" />

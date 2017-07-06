@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="OneCodeWindowCommand.cs" company="Company">
+// <copyright file="MyQuickTransalationCommand.cs" company="Company">
 //     Copyright (c) Company.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -9,26 +9,25 @@ using System.ComponentModel.Design;
 using System.Globalization;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using System.Windows;
 using EnvDTE;
-using OneCode;
 
-namespace OneCode.View
+namespace OneCode
 {
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class OneCodeTranslateSelectionCommand
+    internal sealed class MyQuickTransalationCommand
     {
         /// <summary>
         /// Command ID.
         /// </summary>
-        public const int CommandId = 0x0300;
+        public const int CommandId = 256;
 
         /// <summary>
         /// Command menu group (command set GUID).
         /// </summary>
-        public static readonly Guid CommandSet = new Guid("A1221E65-866E-4F9F-B041-0AF3541C1771");
+        public static readonly Guid CommandSet = new Guid("6bd9e375-9b77-4964-b500-4a74e796e233");
+
         /// <summary>
         /// VS Package that provides this command, not null.
         /// </summary>
@@ -45,11 +44,11 @@ namespace OneCode.View
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OneCodeTranslateSelectionCommand"/> class.
+        /// Initializes a new instance of the <see cref="MyQuickTransalationCommand"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        private OneCodeTranslateSelectionCommand(Package package)
+        private MyQuickTransalationCommand(Package package)
         {
             if (package == null)
             {
@@ -70,7 +69,7 @@ namespace OneCode.View
         /// <summary>
         /// Gets the instance of the command.
         /// </summary>
-        public static OneCodeTranslateSelectionCommand Instance
+        public static MyQuickTransalationCommand Instance
         {
             get;
             private set;
@@ -93,36 +92,22 @@ namespace OneCode.View
         /// <param name="package">Owner package, not null.</param>
         public static void Initialize(Package package)
         {
-            Instance = new OneCodeTranslateSelectionCommand(package);
+            Instance = new MyQuickTransalationCommand(package);
         }
-
-        private void BeforeQueryStatus(object sender, EventArgs e)
-        {
-            OleMenuCommand pasteCommand = (OleMenuCommand)sender;
-
-            // disabled by default
-            pasteCommand.Enabled = false;
-
-            Document activeDoc = GetDTE().ActiveDocument;
-            if (activeDoc != null && activeDoc.ProjectItem != null && activeDoc.ProjectItem.ContainingProject != null)
-            {
-                // enable command, if there is text selected
-                var selection = (TextSelection)activeDoc.Selection;
-                pasteCommand.Enabled = selection != null && selection.Text.Length > 0;
-            }
-        }
-
 
         /// <summary>
-        /// Translates the currentSelected
+        /// This function is the callback used to execute the command when the menu item is clicked.
+        /// See the constructor to see how the menu item is associated with this function using
+        /// OleMenuCommandService service and MenuCommand class.
         /// </summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event args.</param>
-        public async void TranslateSelection(object sender, EventArgs e)
+        /// <param name="sender">Event sender.</param>
+        /// <param name="e">Event args.</param>
+        private async void TranslateSelection(object sender, EventArgs e)
         {
-            
+
             DTE dte = GetDTE();
-            try {
+            try
+            {
                 dte.UndoContext.Open("Übersetze Auswahl");
 
                 var selection = (TextSelection)dte.ActiveDocument.Selection;

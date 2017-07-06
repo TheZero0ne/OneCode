@@ -70,7 +70,7 @@ namespace OneCode.View {
 
             OneCodeWindowCommand.Initialize(this);
             OneCodeConfigWindowCommand.Initialize(this);
-            OneCodeTranslateSelectionCommand.Initialize(this);
+            MyQuickTransalationCommand.Initialize(this);
             base.Initialize();
         }
 
