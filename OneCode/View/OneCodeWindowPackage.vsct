@@ -112,6 +112,11 @@
     </Bitmaps>
   </Commands>
 
+  <KeyBindings>
+    <KeyBinding guid="guidOneCodeWindowPackageCmdSet1" id="cmdidMyQuickTransalationCommand"
+        key1="O" mod1="ALT" editor="guidVSStd97" />
+  </KeyBindings>
+
   <Symbols>
     <!-- This is the package guid. -->
     <GuidSymbol name="guidOneCodeWindowPackage" value="{3294be3f-4de1-4135-a302-2542ff48d271}" />
