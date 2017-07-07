@@ -10,13 +10,13 @@ namespace OneCode {
         private string prefix;
 
         public VariableNameInfo(string _content) {
+            this.content = _content;
             this.prefix = "";
-            this.Content = _content;
         }
 
         public VariableNameInfo(string _content, string _prefix) {
-            this.prefix = _prefix;
             this.content = _content;
+            this.prefix = _prefix;
         }
 
         public string GetContentWithPrefix() {
@@ -30,16 +30,20 @@ namespace OneCode {
 
             set {
                 int index = 0;
+                string tmpPrefix  = "";
                 foreach (Char c in value) {
                     if (!Char.IsLetter(c)) {
-                        prefix += c.ToString();
+                        tmpPrefix += c.ToString();
                     } else {
                         index = value.IndexOf(c);
                         break;
                     }
                 }
-
                 this.content = value.Substring(index);
+                if (this.prefix.Length == 0 || !this.prefix.Equals(tmpPrefix))
+                {
+                    this.prefix = tmpPrefix;
+                }
             }
         }
 

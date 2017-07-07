@@ -40,7 +40,7 @@
 
             <DataGrid DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="lbVariables" ItemsSource="{Binding Source={StaticResource vcvm}}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Kind" Width="SizeToCells" IsReadOnly="True">
+                    <DataGridTemplateColumn Header="Kategorie" Width="SizeToCells" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Kind}" />
@@ -48,7 +48,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Type" Width="SizeToCells" IsReadOnly="True">
+                    <DataGridTemplateColumn Header="Typ" Width="SizeToCells" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Type}" />
@@ -59,15 +59,15 @@
                     <DataGridTemplateColumn Header="Name" Width="SizeToCells" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Var.Name.Content}" />
+                                <TextBlock Text="{Binding Name}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     
-                    <DataGridTemplateColumn Header="Translation" Width="SizeToCells" IsReadOnly="False">
+                    <DataGridTemplateColumn Header="Übersetzung" Width="SizeToCells" IsReadOnly="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Var.Translation.Content}" />
+                                <TextBox Text="{Binding Translation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -95,7 +95,7 @@
             </ListBox>-->
         </DockPanel>
 
-        <Button Grid.Row="1" Grid.RowSpan="1" Margin="10,10,0,10" x:Name="btnSaveChanges" Height="30" Content="Änderungen speichern" Width="200" HorizontalAlignment="Left" />
+        <Button Grid.Row="1" Grid.RowSpan="1" Margin="10,10,0,10" x:Name="btnSaveChanges" Height="30" Content="Übersetzung anwenden" Width="200" Command="{Binding applyChangesToDocClick, Mode=OneWay, Source={StaticResource vcvm}}" HorizontalAlignment="Left" />
     </Grid>
 
 

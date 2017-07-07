@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OneCode {
-    class VariableViewModel {
+    class VariableViewModel
+    {
         public Variable Var { get; }
 
         public VariableViewModel() {
@@ -31,22 +33,23 @@ namespace OneCode {
             set { Var.Kind = value; }
         }
 
-        public VariableNameInfo Name {
+        public string Name {
             get {
-                return Var.Name;
+                return Var.Name.GetContentWithPrefix();
             }
             set {
-                Var.Name = value;
+                Var.Name.Content = value;
             }
         }
 
-        public VariableNameInfo Translation {
+        public string Translation {
             get {
-                return Var.Translation;
+                return Var.Translation.GetContentWithPrefix();
             }
             set {
-                Var.Translation = value;
+                Var.Translation.Content = value;
             }
         }
+
     }
 }
