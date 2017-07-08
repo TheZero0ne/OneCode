@@ -129,8 +129,10 @@ namespace OneCode {
 
             switch (SelectionType) {
                 case SelectionType.CurrentDocument:
-                    EnvDTE.TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as EnvDTE.TextDocument;
-                    await DataAcessor.getInstance().FindVariablesInDoc(activeDoc);
+                    TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
+                    List<TextDocument> list = new List<TextDocument>();
+                    list.Add(activeDoc);
+                    await DataAcessor.getInstance().FindVariablesInDocs(list);
                     FetchFromModels();
                     break;
                 case SelectionType.OpenDocuments:
@@ -191,13 +193,6 @@ namespace OneCode {
 
                     break;
             }
-
-            /**
-             * The current SelectionType 
-             *  
-             * 
-            */
-            
         }
 
         private EnvDTE.TextDocument ConvertFromComObjectToTextDocument(dynamic comObject) {
@@ -219,18 +214,23 @@ namespace OneCode {
             try {
                 WriteToModels();
 
+                
                 switch (SelectionType) {
                     case SelectionType.CurrentDocument:
-                        EnvDTE.TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as EnvDTE.TextDocument;
-                        DataAcessor.getInstance().TryApplyChangesToWorkspace(activeDoc);
+                        TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
+                        List<TextDocument> singleList = new List<TextDocument>();
+                        singleList.Add(activeDoc);
+                        DataAcessor.getInstance().TryApplyChangesToWorkspace(singleList);
                         break;
                     case SelectionType.OpenDocuments:
                         var docs = (Package.GetGlobalService(typeof(DTE)) as DTE).Documents;
+                        List<TextDocument> docList = new List<TextDocument>();
 
-                        foreach (EnvDTE.Document d in docs) {
-                            DataAcessor.getInstance().TryApplyChangesToWorkspace(ConvertFromComObjectToTextDocument(d));
+                        foreach (Document d in docs)
+                        {
+                           docList.Add(ConvertFromComObjectToTextDocument(d));
                         }
-
+                        DataAcessor.getInstance().TryApplyChangesToWorkspace(docList);
                         break;
                     case SelectionType.Project:
 
