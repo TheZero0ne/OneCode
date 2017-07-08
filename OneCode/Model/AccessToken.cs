@@ -33,7 +33,7 @@ namespace OneCode {
             httpWebRequest.Method = "POST";
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Accept = "application/jwt";
-            httpWebRequest.Headers.Add("Ocp-Apim-Subscription-Key", "9e9177423c0d4dd89114c7bfafd8655a");
+            httpWebRequest.Headers.Add("Ocp-Apim-Subscription-Key", "09b4b6d90d124e45b16427900078fab3");
             httpWebRequest.ContentLength = 0;
 
             using (WebResponse response = httpWebRequest.GetResponse()) {
