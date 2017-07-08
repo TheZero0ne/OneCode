@@ -31,9 +31,17 @@ namespace OneCode.DAL
         {
             if (modus == MyRewriterModus.SEARCH)
             {
-                TypeInfo initializerInfo = MySemanticModel.GetTypeInfo(node.Initializer.Value);
+                string typeString = "";
+                if (node.Initializer == null)
+                {
+                    typeString = "nicht initialisiert";
+                } else
+                {
+                    TypeInfo initializerInfo = MySemanticModel.GetTypeInfo(node.Initializer.Value);
+                    typeString = initializerInfo.Type.Name.ToString();
+                }
 
-                varCol.Add(new Variable(initializerInfo.Type.Name.ToString(), node.Identifier.Text, node.Kind().ToString(), node.SpanStart));
+                varCol.Add(new Variable(typeString, node.Identifier.Text, node.Kind().ToString(), node.SpanStart));
             }
             else
             {
