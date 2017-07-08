@@ -12,6 +12,7 @@ using System.Windows;
 using EnvDTE80;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
 
 namespace OneCode {
     class VariableCollectionViewModel : ObservableCollection<VariableViewModel> {
@@ -128,15 +129,15 @@ namespace OneCode {
 
             switch (SelectionType) {
                 case SelectionType.CurrentDocument:
-                    TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
+                    EnvDTE.TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as EnvDTE.TextDocument;
                     await DataAcessor.getInstance().FindVariablesInDoc(activeDoc);
                     FetchFromModels();
                     break;
                 case SelectionType.OpenDocuments:
                     var docs = (Package.GetGlobalService(typeof(DTE)) as DTE).Documents;
-                    List<TextDocument> docList = new List<TextDocument>();
+                    List<EnvDTE.TextDocument> docList = new List<EnvDTE.TextDocument>();
                     
-                    foreach(Document d in docs) {
+                    foreach(EnvDTE.Document d in docs) {
                         docList.Add(ConvertFromComObjectToTextDocument(d));
                     }
 
@@ -145,15 +146,48 @@ namespace OneCode {
 
                     break;
                 case SelectionType.Project:
-                    Projects projects = (Package.GetGlobalService(typeof(DTE)) as DTE).Solution.Projects;
+                    Workspace workspace = DataAcessor.getInstance().Workspace;
 
-                    foreach(Project proj in projects) {
-                        foreach(ProjectItem pi in proj.ProjectItems) {
-                            foreach (var p in pi.Collection) {
-                                TextDocument tDoc = ConvertFromComObjectToTextDocument(p);
+                    var enumer = (Package.GetGlobalService(typeof(DTE)) as DTE).Solution.Projects.GetEnumerator();
+
+                    while (enumer.MoveNext()) {
+                        var test = ((EnvDTE.Project)enumer.Current).ProjectItems;
+
+                        foreach(ProjectItem pi in test) {
+                            try {
+                                var test2 = pi;
+                                var test1 = pi.Object;
+                                var test3 = pi.FileCodeModel;
+
+                                if (pi.Document != null) {
+                                    var test4 = pi.Document.ProjectItem;
+                                }
+                                EnvDTE.TextDocument tDoc0 = pi.Document.ProjectItem as EnvDTE.TextDocument;
+                                EnvDTE.TextDocument tDoc01 = ConvertFromComObjectToTextDocument(pi.Document.ProjectItem as EnvDTE.TextDocument);
+
+                                EnvDTE.TextDocument tDoc = pi.Object as EnvDTE.TextDocument;
+                                EnvDTE.TextDocument tDoc2 = ConvertFromComObjectToTextDocument(pi.Object);
+
+                                EnvDTE.TextDocument tDoc3 = pi as EnvDTE.TextDocument;
+                                if (tDoc3 != null) {
+                                    await DataAcessor.getInstance().FindVariablesInDocs(new List<EnvDTE.TextDocument>() { tDoc3 });
+                                }
+
+                                EnvDTE.TextDocument tDoc4 = ConvertFromComObjectToTextDocument(pi);
+                                EnvDTE.TextDocument tDoc5 = pi.FileCodeModel as EnvDTE.TextDocument;
+                                EnvDTE.TextDocument tDoc6 = ConvertFromComObjectToTextDocument(pi.FileCodeModel);
+                            } catch {
+
                             }
                         }
                     }
+
+                    /*foreach(Microsoft.CodeAnalysis.Project p in workspace.CurrentSolution.Projects) {
+                        foreach(Microsoft.CodeAnalysis.Document d in p.Documents) {
+                            EnvDTE.Solution sol = (Package.GetGlobalService(typeof(DTE)) as DTE).Solution.Projects.;
+                            EnvDTE.TextDocument tDoc = sol.FindProjectItem(d.FilePath) as EnvDTE.TextDocument;
+                        }
+                    }*/
 
                     break;
             }
@@ -166,8 +200,13 @@ namespace OneCode {
             
         }
 
-        private TextDocument ConvertFromComObjectToTextDocument(dynamic comObject) {
-            return comObject.Object;
+        private EnvDTE.TextDocument ConvertFromComObjectToTextDocument(dynamic comObject) {
+            try {
+                return comObject.Object;
+            } catch {
+                return null;
+            }
+            
         }
 
         public void ApplyChangesToDoc()
@@ -182,13 +221,13 @@ namespace OneCode {
 
                 switch (SelectionType) {
                     case SelectionType.CurrentDocument:
-                        TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
+                        EnvDTE.TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as EnvDTE.TextDocument;
                         DataAcessor.getInstance().TryApplyChangesToWorkspace(activeDoc);
                         break;
                     case SelectionType.OpenDocuments:
                         var docs = (Package.GetGlobalService(typeof(DTE)) as DTE).Documents;
 
-                        foreach (Document d in docs) {
+                        foreach (EnvDTE.Document d in docs) {
                             DataAcessor.getInstance().TryApplyChangesToWorkspace(ConvertFromComObjectToTextDocument(d));
                         }
 

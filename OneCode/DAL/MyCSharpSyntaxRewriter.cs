@@ -79,7 +79,7 @@ namespace OneCode.DAL
         {
             if (modus == MyRewriterModus.SEARCH)
             {
-                varCol.Add(new Variable(node.Type.ToString(), node.Identifier.Text, node.Kind().ToString(), node.SpanStart));
+                varCol.Add(new Variable(node.Type.ToString(), node.Identifier.Text, node.Kind().ToString(), node.SpanStart, docName));
             }
             else
             {
