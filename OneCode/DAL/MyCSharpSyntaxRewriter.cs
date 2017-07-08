@@ -73,6 +73,26 @@ namespace OneCode.DAL
             return base.VisitIdentifierName(node);
         }
 
+        public override SyntaxNode VisitPropertyDeclaration(PropertyDeclarationSyntax node)
+        {
+            if (modus == MyRewriterModus.SEARCH)
+            {
+                varCol.Add(new Variable(node.Type.ToString(), node.Identifier.Text, node.Kind().ToString(), node.SpanStart));
+            }
+            else
+            {
+                var enumerable = varCol.Where(x => x.SpanStart == node.SpanStart);
+                if (enumerable.Count() > 0)
+                {
+                    Variable v = enumerable.First();
+                    var newIdentifier = SyntaxFactory.Identifier(v.Translation.GetContentWithPrefix() + node.Identifier.TrailingTrivia.ToString());
+                    return node.WithIdentifier(newIdentifier);
+                }
+            }
+
+            return base.VisitPropertyDeclaration(node);
+        }
+
         public override SyntaxNode VisitParameter(ParameterSyntax node)
         {
             if (modus == MyRewriterModus.SEARCH)
