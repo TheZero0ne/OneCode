@@ -9,6 +9,9 @@ using System.Windows.Data;
 using OneCode.View;
 using System;
 using System.Windows;
+using EnvDTE80;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace OneCode {
     class VariableCollectionViewModel : ObservableCollection<VariableViewModel> {
@@ -121,18 +124,50 @@ namespace OneCode {
         public ICommand applyChangesToDocClick { get { return applyChangesToDoc; } }
 
         public async void FindVariablesInDoc() {
-            var currentSelType = SelectionType;
             bool includeMethodNames = IncludeMethodNamesEnabled && IncludeMethodNamesChecked;
+
+            switch (SelectionType) {
+                case SelectionType.CurrentDocument:
+                    TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
+                    await DataAcessor.getInstance().FindVariablesInDoc(activeDoc);
+                    FetchFromModels();
+                    break;
+                case SelectionType.OpenDocuments:
+                    var docs = (Package.GetGlobalService(typeof(DTE)) as DTE).Documents;
+                    List<TextDocument> docList = new List<TextDocument>();
+                    
+                    foreach(Document d in docs) {
+                        docList.Add(ConvertFromComObjectToTextDocument(d));
+                    }
+
+                    await DataAcessor.getInstance().FindVariablesInDocs(docList);
+                    FetchFromModels();
+
+                    break;
+                case SelectionType.Project:
+                    Projects projects = (Package.GetGlobalService(typeof(DTE)) as DTE).Solution.Projects;
+
+                    foreach(Project proj in projects) {
+                        foreach(ProjectItem pi in proj.ProjectItems) {
+                            foreach (var p in pi.Collection) {
+                                TextDocument tDoc = ConvertFromComObjectToTextDocument(p);
+                            }
+                        }
+                    }
+
+                    break;
+            }
 
             /**
              * The current SelectionType 
              *  
              * 
             */
-            TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
+            
+        }
 
-            await DataAcessor.getInstance().FindVariablesInDoc(activeDoc);
-            FetchFromModels();
+        private TextDocument ConvertFromComObjectToTextDocument(dynamic comObject) {
+            return comObject.Object;
         }
 
         public void ApplyChangesToDoc()
@@ -145,8 +180,24 @@ namespace OneCode {
             try {
                 WriteToModels();
 
-                TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
-                DataAcessor.getInstance().TryApplyChangesToWorkspace(activeDoc);
+                switch (SelectionType) {
+                    case SelectionType.CurrentDocument:
+                        TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
+                        DataAcessor.getInstance().TryApplyChangesToWorkspace(activeDoc);
+                        break;
+                    case SelectionType.OpenDocuments:
+                        var docs = (Package.GetGlobalService(typeof(DTE)) as DTE).Documents;
+
+                        foreach (Document d in docs) {
+                            DataAcessor.getInstance().TryApplyChangesToWorkspace(ConvertFromComObjectToTextDocument(d));
+                        }
+
+                        break;
+                    case SelectionType.Project:
+
+                        break;
+                }
+                
 
                 // When applied successfull clear list
                 this.Clear();

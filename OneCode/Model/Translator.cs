@@ -42,7 +42,7 @@ namespace OneCode {
             VariableCollection varCollection = new VariableCollection();
 
             // add textToTranslate
-            varCollection.Add(new Variable("", textToTranslate, "", 0));
+            varCollection.Add(new Variable("", textToTranslate, "", 0, ""));
 
             var dictionary = varCollection.GetNamesDictionaryForTranslation();
             Task<Dictionary<int, VariableNameInfo>> translationTask = TranslateDictionary(dictionary);

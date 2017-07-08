@@ -50,6 +50,14 @@
                     <DataGridTemplateColumn Header="Kategorie" Width="SizeToCells" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
+                                <TextBlock Text="{Binding DocumentName}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <DataGridTemplateColumn Header="Kategorie" Width="SizeToCells" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
                                 <TextBlock Text="{Binding Kind}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

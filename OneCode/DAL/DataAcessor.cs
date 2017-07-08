@@ -68,7 +68,7 @@ namespace DAL {
             var compilation = CSharpCompilation.Create("MyCompilation", syntaxTrees: new[] { tree }, references: new[] { Mscorlib });
             var model = compilation.GetSemanticModel(tree);
 
-            Rewriter = new MyCSharpSyntaxRewriter(model, varCollection, MyRewriterModus.SEARCH);
+            Rewriter = new MyCSharpSyntaxRewriter(model, varCollection, MyRewriterModus.SEARCH, haystackDoc.Parent.Name);
             var result = Rewriter.Visit(tree.GetRoot());
 
             // Translate
@@ -77,6 +77,31 @@ namespace DAL {
             Dictionary<int, VariableNameInfo> translationDic = await translationTask;
 
             varCollection.ApplyTranslationDictionary(translationDic);
+
+            return this.varCollection;
+        }
+
+        public async Task<VariableCollection> FindVariablesInDocs(List<EnvDTE.TextDocument> haystackDocs) {
+            varCollection = new VariableCollection();
+
+            foreach (EnvDTE.TextDocument haystackDoc in haystackDocs) {
+                var objEditPt = haystackDoc.StartPoint.CreateEditPoint();
+                var tree = CSharpSyntaxTree.ParseText(objEditPt.GetText(haystackDoc.EndPoint));
+
+                var Mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
+                var compilation = CSharpCompilation.Create("MyCompilation", syntaxTrees: new[] { tree }, references: new[] { Mscorlib });
+                var model = compilation.GetSemanticModel(tree);
+
+                Rewriter = new MyCSharpSyntaxRewriter(model, varCollection, MyRewriterModus.SEARCH, haystackDoc.Parent.Name);
+                var result = Rewriter.Visit(tree.GetRoot());
+
+                // Translate
+                var dictionary = varCollection.GetNamesDictionaryForTranslation();
+                Task<Dictionary<int, VariableNameInfo>> translationTask = Translator.TranslateDictionary(dictionary);
+                Dictionary<int, VariableNameInfo> translationDic = await translationTask;
+
+                varCollection.ApplyTranslationDictionary(translationDic);
+            }
 
             return this.varCollection;
         }
@@ -91,7 +116,7 @@ namespace DAL {
             var model = compilation.GetSemanticModel(tree);
 
             // Write
-            Rewriter = new MyCSharpSyntaxRewriter(model, varCollection, MyRewriterModus.WRITE);
+            Rewriter = new MyCSharpSyntaxRewriter(model, varCollection, MyRewriterModus.WRITE, haystackDoc.Parent.Name);
             var result = Rewriter.Visit(tree.GetRoot());
 
             string pathHaystackDoc = haystackDoc.DTE.ActiveDocument.FullName;

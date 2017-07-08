@@ -33,6 +33,11 @@ namespace OneCode {
             set { Var.Kind = value; }
         }
 
+        public string DocumentName {
+            get { return Var.DocumentName; }
+            set { Var.DocumentName = value; }
+        }
+
         public string Name {
             get {
                 return Var.Name.GetContentWithPrefix();

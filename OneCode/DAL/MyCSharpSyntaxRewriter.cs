@@ -14,12 +14,14 @@ namespace OneCode.DAL
         private readonly SemanticModel MySemanticModel;
         private VariableCollection varCol;
         private MyRewriterModus modus;
+        private string docName;
 
-        public MyCSharpSyntaxRewriter(SemanticModel sm, VariableCollection col, MyRewriterModus modus)
+        public MyCSharpSyntaxRewriter(SemanticModel sm, VariableCollection col, MyRewriterModus modus, string docName)
         {
             this.MySemanticModel = sm;
             this.varCol = col;
             this.modus = modus;
+            this.docName = docName;
 
             if (modus == MyRewriterModus.WRITE && (varCol == null || varCol.Count < 1))
             {
@@ -41,7 +43,7 @@ namespace OneCode.DAL
                     typeString = initializerInfo.Type.Name.ToString();
                 }
 
-                varCol.Add(new Variable(typeString, node.Identifier.Text, node.Kind().ToString(), node.SpanStart));
+                varCol.Add(new Variable(typeString, node.Identifier.Text, node.Kind().ToString(), node.SpanStart, docName));
             }
             else
             {
@@ -77,7 +79,7 @@ namespace OneCode.DAL
         {
             if (modus == MyRewriterModus.SEARCH)
             {
-                varCol.Add(new Variable(node.Type.ToString(), node.Identifier.Text, node.Kind().ToString(), node.SpanStart));
+                varCol.Add(new Variable(node.Type.ToString(), node.Identifier.Text, node.Kind().ToString(), node.SpanStart, docName));
             }
             else
             {
