@@ -33,7 +33,14 @@
                 <Label DockPanel.Dock="Left" Margin="10,0,10,0" FontSize="20">Auswahl</Label>
             </DockPanel>
             <ComboBox DockPanel.Dock="Top" Margin="10,0,10,0" VerticalContentAlignment="Center" Height="30" Width="200" x:Name="selectionTypes" HorizontalAlignment="Left"
-                      ItemsSource="{Binding Source={StaticResource selType}}" DisplayMemberPath="Description" SelectedValuePath="Value" SelectedIndex="0"/>
+                      ItemsSource="{Binding Source={StaticResource selType}}" SelectedValue="{Binding SelectionType, Mode=TwoWay, Source={StaticResource vcvm}}" DisplayMemberPath="Description" SelectedValuePath="Value"/>
+            <!--
+            <CheckBox DockPanel.Dock="Top" Margin="10,0,10,0" x:Name="chkBMethods" Height="30" Width="200" HorizontalAlignment="Left" 
+                      Content="inklusive Methodennamen" VerticalContentAlignment="Center" 
+                      IsEnabled="{Binding IncludeMethodNamesEnabled, Mode=TwoWay, Source={StaticResource vcvm}, UpdateSourceTrigger=PropertyChanged}" 
+                      IsChecked="{Binding IncludeMethodNamesChecked, Mode=TwoWay, Source={StaticResource vcvm}, UpdateSourceTrigger=PropertyChanged}">
+            </CheckBox>
+            -->
             <Label DockPanel.Dock="Top" Margin="10,0,10,0" FontSize="20">Suche</Label>
             <TextBlock DockPanel.Dock="Top" Margin="10,0,10,0" TextWrapping="Wrap">Auswahl nach Variablen durchsuchen, die nicht der Konfiguration entsprechen</TextBlock>
             <Button DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="btnFindVariables" Height="30" Content="Auswahl durchsuchen" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" Width="200" HorizontalAlignment="Left" />
@@ -63,7 +70,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    
+
                     <DataGridTemplateColumn Header="Übersetzung" Width="SizeToCells" IsReadOnly="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -73,26 +80,7 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
 
-                <!--<DataGrid.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Path=Text}"/>
-                            <TextBlock Text="{Binding Path=Kind}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </DataGrid.ItemTemplate>-->
             </DataGrid>
-
-            <!--<ListBox DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="lbVariables" ItemsSource="{Binding Source={StaticResource vcvm}}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Path=Text}"/>
-                            <TextBlock Text="{Binding Path=Kind}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>-->
         </DockPanel>
 
         <Button Grid.Row="1" Grid.RowSpan="1" Margin="10,10,0,10" x:Name="btnSaveChanges" Height="30" Content="Übersetzung anwenden" Width="200" Command="{Binding applyChangesToDocClick, Mode=OneWay, Source={StaticResource vcvm}}" HorizontalAlignment="Left" />

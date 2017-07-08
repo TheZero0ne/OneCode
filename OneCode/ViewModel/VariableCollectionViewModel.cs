@@ -15,6 +15,42 @@ namespace OneCode {
         private RelayCommand findVariablesInDoc;
         private RelayCommand applyChangesToDoc;
         private bool syncDisabled = false;
+        private SelectionType currentSelectionType;
+        private bool includeMethodNamesEnabled = false;
+        private bool includeMethodNamesChecked = false;
+
+        // Current Document as default SelectionType
+        public SelectionType SelectionType {
+
+            get{return currentSelectionType;}
+            set
+            {
+                this.currentSelectionType = value;
+                this.IncludeMethodNamesEnabled = currentSelectionType == SelectionType.CurrentDocument;
+            }
+        }
+
+        public bool IncludeMethodNamesEnabled {
+
+            get {return includeMethodNamesEnabled;}
+            set
+            {
+                this.includeMethodNamesEnabled = value;
+                // if disabled, uncheck the CheckBox
+                if (!includeMethodNamesEnabled)
+                {
+                    this.IncludeMethodNamesChecked = false; 
+                }
+            }
+        }
+        public bool IncludeMethodNamesChecked {
+
+            get{return this.includeMethodNamesChecked;}
+            set
+            {
+                this.includeMethodNamesChecked = value;
+            }
+        }
 
         public VariableCollectionViewModel() {
             findVariablesInDoc = new RelayCommand(this.FindVariablesInDoc, this.SyncDisabled);
@@ -22,6 +58,7 @@ namespace OneCode {
 
             this.CollectionChanged += ViewModelCollectionChanged;
             DataAcessor.getInstance().varCollection.CollectionChanged += ModelCollectionChanged;
+            this.SelectionType = SelectionType.CurrentDocument;
         }
 
         private void FetchFromModels() {
@@ -84,6 +121,14 @@ namespace OneCode {
         public ICommand applyChangesToDocClick { get { return applyChangesToDoc; } }
 
         public async void FindVariablesInDoc() {
+            var currentSelType = SelectionType;
+            bool includeMethodNames = IncludeMethodNamesEnabled && IncludeMethodNamesChecked;
+
+            /**
+             * The current SelectionType 
+             *  
+             * 
+            */
             TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
 
             await DataAcessor.getInstance().FindVariablesInDoc(activeDoc);
@@ -97,8 +142,7 @@ namespace OneCode {
                 MessageBox.Show("Keine Variablen gefunden, bitte suchen Sie erst nach Variablen.", "Fehler bei Aufruf");
                 return;
             }
-            try
-            {
+            try {
                 WriteToModels();
 
                 TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
@@ -106,13 +150,9 @@ namespace OneCode {
 
                 // When applied successfull clear list
                 this.Clear();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                     MessageBox.Show("Bei der Anwendung ist ein Fehler aufgetreten.\n" + e.Message, "Interner Fehler");
-            }
-            finally
-            {
+            } finally {
 
             }
 
