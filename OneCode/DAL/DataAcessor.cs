@@ -106,29 +106,24 @@ namespace DAL {
             return this.varCollection;
         }
 
-        public void TryApplyChangesToWorkspace(List<EnvDTE.TextDocument> haystackDocs)
+        public void TryApplyChangesToWorkspace(EnvDTE.TextDocument haystackDoc)
         {
-            var solution = workspace.CurrentSolution;
-            foreach (EnvDTE.TextDocument haystackDoc in haystackDocs)
-            {
-                var objEditPt = haystackDoc.StartPoint.CreateEditPoint();
-                var tree = CSharpSyntaxTree.ParseText(objEditPt.GetText(haystackDoc.EndPoint));
+            var objEditPt = haystackDoc.StartPoint.CreateEditPoint();
+            var tree = CSharpSyntaxTree.ParseText(objEditPt.GetText(haystackDoc.EndPoint));
 
-                var Mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-                var compilation = CSharpCompilation.Create("MyCompilation", syntaxTrees: new[] { tree }, references: new[] { Mscorlib });
-                var model = compilation.GetSemanticModel(tree);
+            var Mscorlib = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
+            var compilation = CSharpCompilation.Create("MyCompilation", syntaxTrees: new[] { tree }, references: new[] { Mscorlib });
+            var model = compilation.GetSemanticModel(tree);
 
-                // Write
-                Rewriter = new MyCSharpSyntaxRewriter(model, varCollection, MyRewriterModus.WRITE, haystackDoc.Parent.Name);
-                var result = Rewriter.Visit(tree.GetRoot());
+            // Write
+            Rewriter = new MyCSharpSyntaxRewriter(model, varCollection, MyRewriterModus.WRITE, haystackDoc.Parent.Name);
+            var result = Rewriter.Visit(tree.GetRoot());
 
-                //string pathHaystackDoc = haystackDoc.DTE.ActiveDocument.FullName;
-                //Microsoft.CodeAnalysis.Document activeCodeDoc = workspace.CurrentSolution.Projects.First().Documents.Where(d => d.FilePath == pathHaystackDoc).First();
-                DocumentId id = solution.GetDocumentIdsWithFilePath(haystackDoc.Parent.FullName).First();
 
-                solution = solution.RemoveDocument(id);
-                solution = solution.AddDocument(id, haystackDoc.Parent.Name, result);
-            }
+            string pathHaystackDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Name;
+            Microsoft.CodeAnalysis.Document activeCodeDoc = workspace.CurrentSolution.Projects.First().Documents.Where(d => d.Name.ToLower().Equals(pathHaystackDoc.ToLower())).First();
+            var solution = workspace.CurrentSolution.RemoveDocument(activeCodeDoc.Id);
+            solution = solution.AddDocument(activeCodeDoc.Id, activeCodeDoc.Name, result);
 
             workspace.TryApplyChanges(solution);
         }
@@ -139,7 +134,6 @@ namespace DAL {
      * 
      *  TODOs 
      *  -   Anzeige der Variablen nach Dokument sortiert
-     *     - Übersetzung bearbeitbar
      *     
      *  -   SelectionType auswerten -> Einschränkung für die Dokumentenauswahl
      *     - Wie Save ich automatisch / programmatisch den ganzen Workspace?

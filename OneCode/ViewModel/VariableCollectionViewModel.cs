@@ -179,19 +179,18 @@ namespace OneCode {
                 switch (SelectionType) {
                     case SelectionType.CurrentDocument:
                         TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
-                        List<TextDocument> singleList = new List<TextDocument>();
-                        singleList.Add(activeDoc);
-                        DataAcessor.getInstance().TryApplyChangesToWorkspace(singleList);
+                        DataAcessor.getInstance().TryApplyChangesToWorkspace(activeDoc);
                         break;
                     case SelectionType.OpenDocuments:
                         var docs = (Package.GetGlobalService(typeof(DTE)) as DTE).Documents;
-                        List<TextDocument> docList = new List<TextDocument>();
 
                         foreach (Document d in docs)
                         {
-                           docList.Add(ConvertFromComObjectToTextDocument(d));
+                           d.Activate();
+                            TextDocument activeDoc2 = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
+                            DataAcessor.getInstance().TryApplyChangesToWorkspace(activeDoc2);
                         }
-                        DataAcessor.getInstance().TryApplyChangesToWorkspace(docList);
+                        
                         break;
                     case SelectionType.Project:
 
