@@ -119,6 +119,7 @@ namespace OneCode {
                         var ns = XNamespace.Get("http://schemas.datacontract.org/2004/07/Microsoft.MT.Web.Service.V2");
                         var sourceTextCounter = 0;
 
+                        // write the translation to a new dictionary with the same unique key to map the old dictionary entry to the new one
                         var keys = dictionaryToTranslate.Keys.GetEnumerator();
                         foreach (XElement xe in doc.Descendants(ns + "TranslateArrayResponse")) {
                             foreach (var node in xe.Elements(ns + "TranslatedText")) {

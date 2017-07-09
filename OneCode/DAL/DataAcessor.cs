@@ -114,6 +114,7 @@ namespace DAL {
             Rewriter = new MyCSharpSyntaxRewriter(model, varCollection, MyRewriterModus.WRITE, haystackDoc.Parent.Name);
             var result = Rewriter.Visit(tree.GetRoot());
 
+            // Get the Microsoft.Code.Analysis Document for the given EnvDTE Document to apply the changed SyntaxTree to the workspace
             string pathHaystackDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Name;
             Microsoft.CodeAnalysis.Document activeCodeDoc = workspace.CurrentSolution.Projects.First().Documents.Where(d => d.Name.ToLower().Equals(pathHaystackDoc.ToLower())).First();
             var solution = workspace.CurrentSolution.RemoveDocument(activeCodeDoc.Id);

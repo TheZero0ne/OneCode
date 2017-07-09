@@ -249,8 +249,9 @@ namespace OneCode {
                     case SelectionType.OpenDocuments:
                         var docs = (Package.GetGlobalService(typeof(DTE)) as DTE).Documents;
 
+                        // iterate over all documents and activate each one of them to apply the changes
                         foreach (EnvDTE.Document d in docs) {
-                           d.Activate();
+                            d.Activate();
                             EnvDTE.TextDocument activeDoc2 = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as EnvDTE.TextDocument;
                             DataAccessor.getInstance().TryApplyChangesToWorkspace(activeDoc2);
                         }
@@ -269,6 +270,7 @@ namespace OneCode {
                                 pis.Add((Package.GetGlobalService(typeof(DTE)) as DTE).Solution.FindProjectItem(doc.FilePath));
                             }
 
+                            // iterate over all documents and activate each one of them to apply the changes
                             foreach (ProjectItem pi in pis) {
                                 try {
                                     if (!pi.IsOpen) {
