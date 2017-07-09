@@ -9,6 +9,8 @@ using System;
 using System.Windows;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace OneCode {
     /// <summary>
@@ -23,6 +25,14 @@ namespace OneCode {
         private bool includeMethodNamesChecked = false;
 
         #region getters & setters
+
+        public ICollectionView GroupedVariables {
+            get {
+                ListCollectionView groupedVariables = new ListCollectionView(this);
+                groupedVariables.GroupDescriptions.Add(new PropertyGroupDescription("DocumentName"));
+                return groupedVariables;
+            }
+        }
 
         // Current Document as default SelectionType
         public SelectionType SelectionType {

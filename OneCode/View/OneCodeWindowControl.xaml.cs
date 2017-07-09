@@ -5,15 +5,8 @@
 //------------------------------------------------------------------------------
 
 namespace OneCode.View {
-    using EnvDTE;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.VisualStudio.Shell;
-    using Microsoft.VisualStudio.Shell.Interop;
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.Design;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
+    using global::DAL;
+    using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -28,13 +21,10 @@ namespace OneCode.View {
             this.InitializeComponent();
         }
 
-        private void btnOpenConfig_Click(object sender, RoutedEventArgs e)
-        {
-            if (OneCodeConfigWindowCommand.Instance != null)
-            {
+        private void btnOpenConfig_Click(object sender, RoutedEventArgs e) {
+            if (OneCodeConfigWindowCommand.Instance != null) {
                 OneCodeConfigWindowCommand.Instance.ShowToolWindow(sender, e);
-            } else
-            {
+            } else {
                 MessageBox.Show("Konfiguration kann nicht geöffnet werden.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

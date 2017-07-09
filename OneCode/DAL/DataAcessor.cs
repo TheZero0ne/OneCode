@@ -6,8 +6,10 @@ using Microsoft.VisualStudio.Shell;
 using OneCode;
 using OneCode.DAL;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace DAL {
     /// <summary>
@@ -20,6 +22,14 @@ namespace DAL {
         private Microsoft.CodeAnalysis.Document doc;
 
         #region getters & setters
+
+        public ICollectionView GroupedVariables {
+            get {
+                ListCollectionView groupedVariables = new ListCollectionView(varCollection);
+                groupedVariables.GroupDescriptions.Add(new PropertyGroupDescription("DocumentName"));
+                return groupedVariables;
+            }
+        }
 
         private MyCSharpSyntaxRewriter Rewriter { get; set; }
 
@@ -112,14 +122,4 @@ namespace DAL {
             workspace.TryApplyChanges(solution);
         }
     }
-
-    /*
-     * 
-     *  TODOs 
-     *  -   Anzeige der Variablen nach Dokument sortiert
-     *  
-     *  -   Dokumentation ^-^
-     * 
-     * 
-     */
 }

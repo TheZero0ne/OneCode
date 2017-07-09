@@ -43,51 +43,46 @@
             -->
             <Label DockPanel.Dock="Top" Margin="10,0,10,0" FontSize="20">Suche</Label>
             <TextBlock DockPanel.Dock="Top" Margin="10,0,10,0" TextWrapping="Wrap">Auswahl nach Variablen durchsuchen, die nicht der Konfiguration entsprechen</TextBlock>
-            <Button DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="btnFindVariables" Height="30" Content="Auswahl durchsuchen" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" Width="200" HorizontalAlignment="Left" />
+            <Button DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="btnFindVariables" Height="30" Content="Auswahl durchsuchen" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" Width="200" HorizontalAlignment="Left"/>
 
-            <DataGrid DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="lbVariables" ItemsSource="{Binding Source={StaticResource vcvm}}" AutoGenerateColumns="False">
+            <DataGrid ItemsSource="{Binding GroupedVariables, Source={StaticResource vcvm}}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Kategorie" Width="SizeToCells" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding DocumentName}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    
-                    <DataGridTemplateColumn Header="Kategorie" Width="SizeToCells" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Kind}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="Typ" Width="SizeToCells" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Type}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="Name" Width="SizeToCells" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="Übersetzung" Width="SizeToCells" IsReadOnly="False">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Translation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding Kind}" Header="Kind" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Type}" Header="Type" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Name}" Header="Name" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Translation}" Header="Translation" IsReadOnly="False"/>
                 </DataGrid.Columns>
-
+                <DataGrid.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Path=Name}" FontWeight="Bold" Padding="3"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                                            <Expander>
+                                                <Expander.Header>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Path=Name}" />
+                                                        <TextBlock Text="{Binding Path=ItemCount}" Margin="8,0,4,0"/>
+                                                        <TextBlock Text="Items"/>
+                                                    </StackPanel>
+                                                </Expander.Header>
+                                                <ItemsPresenter />
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </DataGrid.GroupStyle>
             </DataGrid>
         </DockPanel>
 
