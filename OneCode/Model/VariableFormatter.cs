@@ -17,14 +17,16 @@ namespace OneCode {
                 splitString = s.Replace("_", " ").Trim();
             }
 
+            string tmpSplit = splitString;
             foreach (Char c in splitString)
             {
-                if (!Char.IsLetter(c)) { 
-                    splitString = splitString.Insert(splitString.IndexOf(c), " ");
-                    splitString = splitString.Insert(splitString.IndexOf(c), " ");
+                if (!Char.IsLetter(c) && c != ' ') { 
+                    tmpSplit = tmpSplit.Insert(tmpSplit.IndexOf(c), " ");
+                    tmpSplit = tmpSplit.Insert(tmpSplit.IndexOf(c) + 1, " ");
                 }
 
             }
+            splitString = tmpSplit;
 
             splitString = Regex.Replace(splitString, "  ", " ", RegexOptions.Compiled);
 
@@ -40,10 +42,16 @@ namespace OneCode {
                 int i = 0;
 
                 foreach (string p in parts) {
-                    if (0 == i++) {
-                        mergedString += p[0].ToString().ToLower() + p.Remove(0, 1);
-                    } else {
-                        mergedString += p[0].ToString().ToUpper() + p.Remove(0, 1);
+
+                    if (p.Length == 1 && !Char.IsLetter(p[0]))
+                    {
+                        mergedString += p;
+                    } else { 
+                        if (0 == i++) {
+                            mergedString += p[0].ToString().ToLower() + p.Remove(0, 1);
+                        } else {
+                            mergedString += p[0].ToString().ToUpper() + p.Remove(0, 1);
+                        }
                     }
                 }
             } else if (Settings.Default.CodeStyle == CodeStyle.UnderLine) {
