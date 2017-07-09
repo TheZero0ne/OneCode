@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace OneCode {
     /// <summary>
-    ///  Definiert, nach welcher Logik die einzelnen Wörter bei Variablen aufgetrennt werden
+    /// Defines how to split and merge the variables for translation
     /// </summary>
     public enum CodeStyle {
         [Description("Camel Case")]

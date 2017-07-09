@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OneCode {
-    class VariableViewModel
-    {
+﻿namespace OneCode {
+    /// <summary>
+    /// The ViewModel of the Variable
+    /// </summary>
+    class VariableViewModel {
         public Variable Var { get; }
 
         public VariableViewModel() {
@@ -55,6 +50,5 @@ namespace OneCode {
                 Var.Translation.Content = value;
             }
         }
-
     }
 }

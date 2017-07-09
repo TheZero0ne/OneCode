@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace OneCode {
     /// <summary>
-    ///  Definiert den Such- und Anwendungsradius für OneCode 
+    ///  Defines the depth of the search of variables for the translation 
     /// </summary>
     public enum SelectionType {
         [Description("aktuelles (offenes) Dokument")]

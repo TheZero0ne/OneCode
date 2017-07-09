@@ -2,6 +2,9 @@
 using System.Globalization;
 
 namespace OneCode {
+    /// <summary>
+    /// The Variables holds all data we need during the process of translation
+    /// </summary>
     [Serializable]
     class Variable {
         public CultureInfo FromLanguage { get; set; }
@@ -14,9 +17,7 @@ namespace OneCode {
         public int SpanStart { get; set; }
         public string DocumentName { get; set; }
 
-        public Variable() {
-
-        }
+        public Variable() { }
 
         public Variable(string _type, string _name, string _kind, int _spanStart, string _docName) {
             this.Type = _type;

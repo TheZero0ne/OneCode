@@ -63,7 +63,7 @@ namespace OneCode.View {
             var componentModel = (IComponentModel)this.GetService(typeof(SComponentModel));
             var workspace = componentModel.GetService<VisualStudioWorkspace>();
 
-            DataAcessor.getInstance().Workspace = workspace;
+            DataAccessor.getInstance().Workspace = workspace;
 
             workspace.DocumentOpened += Workspace_DocumentOpened;
             workspace.WorkspaceChanged += Workspace_WorkspaceChanged;
@@ -79,7 +79,7 @@ namespace OneCode.View {
         }
 
         private void Workspace_DocumentOpened(object sender, DocumentEventArgs e) {
-            DataAcessor.getInstance().ActualDocument = DataAcessor.getInstance().Workspace.CurrentSolution.GetDocument(e.Document.Id);
+            DataAccessor.getInstance().ActualDocument = DataAccessor.getInstance().Workspace.CurrentSolution.GetDocument(e.Document.Id);
             Debug.WriteLine("Opened");
         }
     }

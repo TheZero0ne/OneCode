@@ -3,15 +3,25 @@ using System.Net;
 using System.Text;
 
 namespace OneCode {
+    /// <summary>
+    /// The AccessToken is in the DataAccessLayer to provide the AccessToken for the Azure-API for translation.
+    /// </summary>
     class AccessToken {
         private static AccessToken instance;
         private string bearer;
         private DateTime bearerCreationTime;
 
+        /// <summary>
+        /// The Constructor is private because AccessToken follows the pattern of a Singleton
+        /// </summary>
         private AccessToken() {
             SetBearer();
         }
 
+        /// <summary>
+        /// This Method is the only point to get an instance of AccessToken. Because the Construcor is private there will only be one Instance of this class at runtime at once.
+        /// </summary>
+        /// <returns>An instance of AccessToken</returns>
         public static AccessToken GetInstance() {
             if (instance == null)
                 instance = new AccessToken();
@@ -19,6 +29,10 @@ namespace OneCode {
             return instance;
         }
 
+        /// <summary>
+        /// Checks if the actual Bearer is valid, asks for a new one if not and provides the Bearer.
+        /// </summary>
+        /// <returns>The Bearer in the format "Bearer <<Bearer>>"</returns>
         public string GetBearer() {
             if ((DateTime.Now - bearerCreationTime).Minutes > 8)
                 SetBearer();
@@ -26,6 +40,9 @@ namespace OneCode {
             return "Bearer " + bearer;
         }
 
+        /// <summary>
+        /// Sets a new Bearer by calling the Azure-API
+        /// </summary>
         private void SetBearer() {
             bearerCreationTime = DateTime.Now;
 

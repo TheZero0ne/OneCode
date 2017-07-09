@@ -53,7 +53,7 @@
   <ItemGroup>
     <Compile Include="DAL\DataAcessor.cs" />
     <Compile Include="DAL\MyCSharpSyntaxRewriter.cs" />
-    <Compile Include="Model\AccessToken.cs" />
+    <Compile Include="DAL\AccessToken.cs" />
     <Compile Include="Model\CodeStyle.cs" />
     <Compile Include="Model\SelectionType.cs" />
     <Compile Include="Model\Translator.cs" />

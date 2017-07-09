@@ -9,17 +9,27 @@ using System.Runtime.Serialization;
 using System.IO;
 using OneCode.Properties;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace OneCode {
-    class Translator {
+    /// <summary>
+    /// The Translator provides methods to translate strings or arrays of strings.
+    /// </summary>
+    static class Translator {
+
+        /// <summary>
+        /// Translates a string from and into a language which was configured in the settings.
+        /// </summary>
+        /// <param name="textToTranslate">A string which should be translated</param>
+        /// <returns>The translated string</returns>
         public static async Task<string> TranslateString(string textToTranslate) {
 
             // If the text needs to be separated for translation automaticly use the dictonary method
-            if (textToTranslate != null && VariableFormatter.SplitString(textToTranslate).Contains(" "))
-            {
+            if (textToTranslate != null && VariableFormatter.SplitString(textToTranslate).Contains(" ")) {
                 return await TranslateAsDictonary(textToTranslate);
             }
 
+            // building the request for the Azure-Api
             string translatedString = "";
             string from = "" + Settings.Default.BaseLanguage;
             string to = "" + Settings.Default.CodeLanguage;
@@ -27,6 +37,7 @@ namespace OneCode {
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
             httpWebRequest.Headers.Add("Authorization", AccessToken.GetInstance().GetBearer());
 
+            // calling the Azure-Api
             using (WebResponse response = httpWebRequest.GetResponse())
 
             using (Stream stream = response.GetResponseStream()) {
@@ -37,8 +48,12 @@ namespace OneCode {
             return translatedString;
         }
 
-        private static async Task<string> TranslateAsDictonary(string textToTranslate)
-        {
+        /// <summary>
+        /// Translates the given string into a Dictionary
+        /// </summary>
+        /// <param name="textToTranslate">A string which should be translated</param>
+        /// <returns>The translated string</returns>
+        private static async Task<string> TranslateAsDictonary(string textToTranslate) {
             VariableCollection varCollection = new VariableCollection();
 
             // add textToTranslate
@@ -53,10 +68,15 @@ namespace OneCode {
             return varCollection[0].Translation.GetContentWithPrefix();
         }
 
-
+        /// <summary>
+        /// Translates a Dictionary of strings into a language which was configured in the settings.
+        /// </summary>
+        /// <param name="dictionaryToTranslate">The Dictionary which should be translated</param>
+        /// <returns>A Task of the translated Dictionary</returns>
         public static async Task<Dictionary<int, VariableNameInfo>> TranslateDictionary(Dictionary<int, VariableNameInfo> dictionaryToTranslate) {
             Dictionary<int, VariableNameInfo> translated = new Dictionary<int, VariableNameInfo>();
 
+            // building the request-body for the call of the Azure-Api
             var from = "" + Settings.Default.BaseLanguage;
             var to = "" + Settings.Default.CodeLanguage;
             var uri = "https://api.microsofttranslator.com/v2/Http.svc/TranslateArray";
@@ -82,6 +102,7 @@ namespace OneCode {
                        "</TranslateArrayRequest>";
             string requestBody = string.Format(body, from, "text/plain", to);
 
+            // calling the Azure-Api
             using (var client = new HttpClient())
             using (var request = new HttpRequestMessage()) {
                 request.Method = HttpMethod.Post;
@@ -109,8 +130,8 @@ namespace OneCode {
 
                         return translated;
                     default:
-                        //TODO: Exception hübsch machen
-                        throw new Exception("Geht nicht");
+                        MessageBox.Show("Bei der Übersetzung ist ein Fehler in der Übersetzungs-API aufgetreten.");
+                        break;
                 }
 
             }
