@@ -131,9 +131,8 @@ namespace OneCode {
                         return translated;
                     default:
                         MessageBox.Show("Bei der Übersetzung ist ein Fehler in der Übersetzungs-API aufgetreten.");
-                        break;
+                        return translated;
                 }
-
             }
         }
     }
