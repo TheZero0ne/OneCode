@@ -134,10 +134,6 @@ namespace DAL {
      * 
      *  TODOs 
      *  -   Anzeige der Variablen nach Dokument sortiert
-     *     
-     *  -   SelectionType auswerten -> Einschränkung für die Dokumentenauswahl
-     *     - Wie Save ich automatisch / programmatisch den ganzen Workspace?
-     *     - Kann der Benutzer auswählen, ob direkt gespeichert oder nur geändert wird?!
      *  
      *  -   Dokumentation ^-^
      * 
