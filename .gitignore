@@ -242,4 +242,4 @@ ModelManifest.xml
 .fake/
 
 # AccessToken
-Model/AccessToken.cs
+DAL/AccessToken.cs

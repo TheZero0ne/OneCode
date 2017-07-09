@@ -32,7 +32,7 @@ namespace OneCode {
         public void ApplyTranslationDictionary(Dictionary<int, VariableNameInfo> dic) {
             foreach (var val in dic) {
                 Variable variable = this.Where(x => x.SpanStart == val.Key).First();
-                val.Value.Content = VariableFormatter.MergeString(val.Value.Content);
+                val.Value.Content = val.Value.Prefix + VariableFormatter.MergeString(val.Value.Content);
                 variable.Translation = val.Value;
             }
         }

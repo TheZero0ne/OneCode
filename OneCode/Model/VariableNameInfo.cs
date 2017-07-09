@@ -9,8 +9,8 @@ namespace OneCode {
         private string prefix;
 
         public VariableNameInfo(string _content) {
-            this.content = _content;
             this.prefix = "";
+            this.Content = _content;
         }
 
         public VariableNameInfo(string _content, string _prefix) {
