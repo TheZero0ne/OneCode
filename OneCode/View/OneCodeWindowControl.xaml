@@ -43,14 +43,14 @@
             -->
             <Label DockPanel.Dock="Top" Margin="10,0,10,0" FontSize="20">Suche</Label>
             <TextBlock DockPanel.Dock="Top" Margin="10,0,10,0" TextWrapping="Wrap">Auswahl nach Variablen durchsuchen, die nicht der Konfiguration entsprechen</TextBlock>
-            <Button DockPanel.Dock="Top" Margin="10,10,10,0" x:Name="btnFindVariables" Height="30" Content="Auswahl durchsuchen" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" Width="200" HorizontalAlignment="Left"/>
+            <Button DockPanel.Dock="Top" Margin="10,10,10,5" x:Name="btnFindVariables" Height="30" Content="Auswahl durchsuchen" Command="{Binding findVariablesInDocClick, Mode=OneWay, Source={StaticResource vcvm}}" Width="200" HorizontalAlignment="Left"/>
 
             <DataGrid ItemsSource="{Binding GroupedVariables, Source={StaticResource vcvm}}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Kind}" Header="Kind" IsReadOnly="True"/>
-                    <DataGridTextColumn Binding="{Binding Type}" Header="Type" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Kind}" Header="Art" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Type}" Header="Typ" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding Name}" Header="Name" IsReadOnly="True"/>
-                    <DataGridTextColumn Binding="{Binding Translation}" Header="Translation" IsReadOnly="False"/>
+                    <DataGridTextColumn Binding="{Binding Translation}" Header="Übersetzung" IsReadOnly="False"/>
                 </DataGrid.Columns>
                 <DataGrid.GroupStyle>
                     <GroupStyle>
