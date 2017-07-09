@@ -5,8 +5,6 @@
 //------------------------------------------------------------------------------
 
 namespace OneCode.View {
-    using global::DAL;
-    using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
 

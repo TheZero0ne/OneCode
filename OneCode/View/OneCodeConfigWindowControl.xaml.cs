@@ -5,16 +5,7 @@
 //------------------------------------------------------------------------------
 
 namespace OneCode.View {
-    using Microsoft.CodeAnalysis;
-    using Microsoft.VisualStudio.Shell;
-    using Microsoft.VisualStudio.Shell.Interop;
     using Properties;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-    using System.Linq;
-    using System.Windows;
     using System.Windows.Controls;
 
     /// <summary>
@@ -28,8 +19,7 @@ namespace OneCode.View {
             this.InitializeComponent();
         }
 
-        private void settingSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private void settingSelectionChanged(object sender, SelectionChangedEventArgs e) {
             // Save Settings on every Settings-Change
             Settings.Default.Save();
         }

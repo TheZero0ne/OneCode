@@ -4,7 +4,15 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace OneCode {
+    /// <summary>
+    /// The VariableFormatter splits the variable Name like the user configured and splits the prefix and the namecontent into two fields.
+    /// </summary>
     static class VariableFormatter {
+        /// <summary>
+        /// Splits a string with blanks and detects a prefix. 
+        /// </summary>
+        /// <param name="s">A string to split</param>
+        /// <returns>The splitted string</returns>
         public static string SplitString(string s) {
             string splitString = "";
 
@@ -30,6 +38,11 @@ namespace OneCode {
             return splitString.Length > 0 ? splitString : s;
         }
 
+        /// <summary>
+        /// Merges a string and removes all blanks.
+        /// </summary>
+        /// <param name="s">The string to merge</param>
+        /// <returns>The merged string</returns>
         public static string MergeString(string s) {
             string mergedString = "";
             string[] parts = s.Split(' ');
