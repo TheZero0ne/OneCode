@@ -163,12 +163,10 @@ namespace OneCode {
 
                         foreach (ProjectItem pi in pis) {
                             try {
-                                if (pi.IsOpen) {
-                                    edoclist.Add(pi.Document.Object() as EnvDTE.TextDocument);
-                                } else {
+                                if (!pi.IsOpen) {
                                     pi.Open();
-                                    edoclist.Add(pi.Document.Object() as EnvDTE.TextDocument);
                                 }
+                                edoclist.Add(pi.Document.Object() as EnvDTE.TextDocument);
                             } catch {
 
                             }
@@ -208,7 +206,7 @@ namespace OneCode {
                 
                 switch (SelectionType) {
                     case SelectionType.CurrentDocument:
-                        TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
+                        EnvDTE.TextDocument activeDoc = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as EnvDTE.TextDocument;
                         DataAcessor.getInstance().TryApplyChangesToWorkspace(activeDoc);
                         break;
                     case SelectionType.OpenDocuments:
@@ -217,13 +215,44 @@ namespace OneCode {
                         foreach (EnvDTE.Document d in docs)
                         {
                            d.Activate();
-                            TextDocument activeDoc2 = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as TextDocument;
+                            EnvDTE.TextDocument activeDoc2 = (Package.GetGlobalService(typeof(DTE)) as DTE).ActiveDocument.Object() as EnvDTE.TextDocument;
                             DataAcessor.getInstance().TryApplyChangesToWorkspace(activeDoc2);
                         }
                         
                         break;
                     case SelectionType.Project:
+                        Workspace workspace = DataAcessor.getInstance().Workspace;
+                        List<ProjectItem> pis = new List<ProjectItem>();
 
+                        var ids = workspace.CurrentSolution.ProjectIds.GetEnumerator();
+
+                        while (ids.MoveNext())
+                        {
+                            var roslynDocs = workspace.CurrentSolution.GetProject(ids.Current).Documents;
+
+                            foreach (Microsoft.CodeAnalysis.Document doc in roslynDocs)
+                            {
+                                pis.Add((Package.GetGlobalService(typeof(DTE)) as DTE).Solution.FindProjectItem(doc.FilePath));
+                            }
+
+                            foreach (ProjectItem pi in pis)
+                            {
+                                try
+                                {
+                                    if (!pi.IsOpen)
+                                    {
+                                        pi.Open();
+                                    }
+                                    EnvDTE.TextDocument doc= pi.Document.Object() as EnvDTE.TextDocument;
+                                    pi.Document.Activate();
+                                    DataAcessor.getInstance().TryApplyChangesToWorkspace(doc);
+                                }
+                                catch
+                                {
+
+                                }
+                            }
+                        }
                         break;
                 }
                 
