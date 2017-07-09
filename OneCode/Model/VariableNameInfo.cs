@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace OneCode {
     /// <summary>
@@ -48,6 +49,7 @@ namespace OneCode {
                 this.content = value.Substring(index);
 
                 if (this.prefix.Length == 0 || !this.prefix.Equals(tmpPrefix)) {
+                    tmpPrefix = Regex.Replace(tmpPrefix, @"\s+", "");
                     this.prefix = tmpPrefix;
                 }
             }
