@@ -365,7 +365,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Resources\settings.png" />
-    <Resource Include="View\Resources\translation.png" />
+    <Content Include="View\Resources\translation.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Resource Include="View\Images\settings.png" />
     <VSCTCompile Include="View\OneCodeWindowPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>

@@ -3,7 +3,8 @@
   <Metadata>
     <Identity Id="OneCode.Tim Eickelmann.b700f003-16bd-41ed-b1ec-165a12f888b9" Version="1.0" Language="en-US" Publisher="Tim Eickelmann" />
     <DisplayName>OneCode</DisplayName>
-    <Description>Empty VSIX Project.</Description>
+    <Description xml:space="preserve">OneCode - Einheitliches Programmieren leicht gemacht</Description>
+    <Icon>translation.png</Icon>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
